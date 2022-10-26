@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "basicmachines",
+  "version": "${version}",
+  "name": "Basic Machines",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "PanSzelescik"
+  ],
+  "contact": {
+    "website": "https://www.curseforge.com/minecraft/mc-mods/basic-machines",
+    "repo": "https://github.com/PanSzelescik/basicmachines",
+    "issues": "https://github.com/PanSzelescik/basicmachines/issues",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/basic-machines",
+    "sources": "https://github.com/PanSzelescik/basicmachines"
+  },
+  "license": "MIT License",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "pl.panszelescik.basicmachines.fabric.client.BasicMachinesFabricClient"
+    ],
+    "main": [
+      "pl.panszelescik.basicmachines.fabric.BasicMachinesModFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric-api": "*",
+    "minecraft": ">=1.19",
+    "java": ">=17",
+    "architectury": ">=5"
+  },
+  "suggests": {
+    "jei": ">=11"
+  }
+}

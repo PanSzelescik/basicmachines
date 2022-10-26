@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "basicmachines:block/electric_furnace",
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "basicmachines:block/electric_furnace",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "basicmachines:block/electric_furnace",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "basicmachines:block/electric_furnace",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

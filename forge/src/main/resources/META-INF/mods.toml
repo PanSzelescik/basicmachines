@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "[41,)"
+license = "All Rights Reserved"
+issueTrackerURL="https://github.com/PanSzelescik/basicmachines/issues"
+[[mods]]
+modId = "basicmachines"
+version = "${version}"
+displayName = "Basic Machines"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/basicmachines"
+authors = "PanSzelescik"
+description = '''
+This is an example description! Tell everyone what your mod is about!
+'''
+[[dependencies.basicmachines]]
+modId = "forge"
+mandatory = true
+versionRange = "[41.0.94,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.basicmachines]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19,1.20)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.basicmachines]]
+modId = "jei"
+mandatory = false
+versionRange = "[11,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.basicmachines]]
+modId = "architectury"
+mandatory = true
+versionRange = "[5,)"
+ordering = "AFTER"
+side = "BOTH"

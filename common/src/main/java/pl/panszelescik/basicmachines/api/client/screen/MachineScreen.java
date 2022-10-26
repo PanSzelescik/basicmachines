@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 
-public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu> {
+public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<?>> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/dispenser.png");
 

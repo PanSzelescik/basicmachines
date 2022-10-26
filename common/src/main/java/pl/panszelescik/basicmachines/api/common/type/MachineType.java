@@ -1,6 +1,7 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
 import dev.architectury.registry.registries.RegistrySupplier;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -23,11 +24,10 @@ import java.util.function.ToIntFunction;
 
 public class MachineType<R extends Recipe<Container>> {
 
-    private static final int[] INPUT_SLOTS = new int[]{0};
-    private static final int[] OUTPUT_SLOTS = new int[]{1};
+    public static final int[] INPUT_SLOTS = new int[]{0};
+    public static final int[] OUTPUT_SLOTS = new int[]{1};
 
-    // Types
-    public static final MachineType<SmeltingRecipe> ELECTRIC_FURNACE = new MachineType<>("electric_furnace", RecipeType.SMELTING, INPUT_SLOTS, OUTPUT_SLOTS, AbstractCookingRecipe::getCookingTime);
+    public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();;
 
     private final String name;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;
@@ -39,11 +39,7 @@ public class MachineType<R extends Recipe<Container>> {
     private RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
     private RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
 
-    private MachineType(String name, RecipeType<R> recipeType, int[] inputSlots, int[] outputSlots) {
-        this(name, recipeType, inputSlots, outputSlots, null);
-    }
-
-    private MachineType(String name, RecipeType<R> recipeType, int[] inputSlots, int[] outputSlots, ToIntFunction<R> processingTimeFunction) {
+    public MachineType(String name, RecipeType<R> recipeType, int[] inputSlots, int[] outputSlots, ToIntFunction<R> processingTimeFunction) {
         this.name = name;
         this.recipeManager = RecipeManager.createCheck(recipeType);
         this.inputSlots = inputSlots;
@@ -102,38 +98,38 @@ public class MachineType<R extends Recipe<Container>> {
     }
 
     // Registering
-    public void registerBlock() {
+    private void registerBlock() {
         this.block = BasicMachinesMod.BLOCKS.register(this.getMachineName(), () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
     }
 
-    public void registerBlockItem() {
+    private void registerBlockItem() {
         this.blockItem = BasicMachinesMod.registerBlockItem(this.block);
     }
 
-    public void registerBlockEntityType() {
+    private void registerBlockEntityType() {
         this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.getMachineName(), () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
     }
 
-    public void registerMenuType() {
+    private void registerMenuType() {
         this.menuType = BasicMachinesMod.MENU_TYPES.register(this.getMachineName(), () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
     }
 
-    public void register() {
+    private void register() {
         this.registerBlock();
         this.registerBlockItem();
         this.registerBlockEntityType();
         this.registerMenuType();
     }
 
-    public void registerClient() {
+    private void registerClient() {
         MenuScreens.register(this.getMenuType(), MachineScreen::new);
     }
 
     public static void registerAll() {
-        ELECTRIC_FURNACE.register();
+        MACHINE_TYPES.forEach(MachineType::register);
     }
 
     public static void registerAllClient() {
-        ELECTRIC_FURNACE.registerClient();
+        MACHINE_TYPES.forEach(MachineType::registerClient);
     }
 }

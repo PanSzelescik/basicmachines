@@ -47,7 +47,7 @@ public class MachineBlock<R extends Recipe<Container>> extends DirectionalBlock 
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean bl) {
         if (!state.is(newState.getBlock())) {
             var blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof MachineBlockEntity machineBlockEntity) {
+            if (blockEntity instanceof MachineBlockEntity<?> machineBlockEntity) {
                 if (!level.isClientSide) {
                     Containers.dropContents(level, pos, machineBlockEntity);
                 }

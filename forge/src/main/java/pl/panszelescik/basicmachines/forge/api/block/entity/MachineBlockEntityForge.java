@@ -13,8 +13,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.forge.api.util.LazyOptionalUtils;
@@ -29,7 +27,7 @@ public class MachineBlockEntityForge<R extends Recipe<Container>> extends Machin
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction direction) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction direction) {
         return LazyOptionalUtils.or(
                 ForgeCapabilities.ENERGY.orEmpty(cap, this.holder.cast()),
                 () -> ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, this.holder.cast())
@@ -74,7 +72,7 @@ public class MachineBlockEntityForge<R extends Recipe<Container>> extends Machin
 
     // Item
     @Override
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) {
             return ItemStack.EMPTY;
         }
@@ -113,7 +111,7 @@ public class MachineBlockEntityForge<R extends Recipe<Container>> extends Machin
     }
 
     @Override
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (amount <= 0) {
             return ItemStack.EMPTY;
         }
@@ -148,7 +146,7 @@ public class MachineBlockEntityForge<R extends Recipe<Container>> extends Machin
     }
 
     @Override
-    public @NotNull ItemStack getStackInSlot(int i) {
+    public ItemStack getStackInSlot(int i) {
         return this.getItem(i);
     }
 
@@ -158,22 +156,22 @@ public class MachineBlockEntityForge<R extends Recipe<Container>> extends Machin
     }
 
     @Override
-    public boolean isItemValid(int i, @NotNull ItemStack arg) {
+    public boolean isItemValid(int i, ItemStack arg) {
         return this.canPlaceItem(i, arg);
     }
 
     @Override
-    public void setStackInSlot(int i, @NotNull ItemStack arg) {
+    public void setStackInSlot(int i, ItemStack arg) {
         this.setItem(i, arg);
     }
 
-    private int getStackLimit(int slot, @NotNull ItemStack stack) {
+    private int getStackLimit(int slot, ItemStack stack) {
         return Math.min(this.getSlotLimit(slot), stack.getMaxStackSize());
     }
 
     private void validateSlotIndex(int slot) {
         if (slot < 0 || slot >= this.getContainerSize()) {
-            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + this.getContainerSize() + ")");
+            throw new IllegalArgumentException("Slot " + slot + " not in valid range - [0," + this.getContainerSize() + ")");
         }
     }
 }

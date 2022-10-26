@@ -6,7 +6,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 
 import java.util.Arrays;
@@ -121,7 +120,7 @@ public interface IMachineContainer extends WorldlyContainer {
     }
 
     @Override
-    default boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @Nullable Direction direction) {
+    default boolean canPlaceItemThroughFace(int i, ItemStack itemStack, Direction direction) {
         return canPlaceItem(i);
     }
 

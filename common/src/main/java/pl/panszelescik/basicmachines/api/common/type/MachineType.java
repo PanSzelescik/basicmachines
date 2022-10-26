@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -78,6 +79,10 @@ public class MachineType<R extends Recipe<Container>> {
 
     public BlockItem getBlockItem() {
         return this.blockItem.get();
+    }
+
+    public ItemStack getItemStack() {
+        return this.getBlockItem().getDefaultInstance();
     }
 
     @SuppressWarnings("unchecked")

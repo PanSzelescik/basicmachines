@@ -22,6 +22,9 @@
     ],
     "main": [
       "pl.panszelescik.basicmachines.fabric.BasicMachinesModFabric"
+    ],
+    "jei_mod_plugin": [
+      "pl.panszelescik.basicmachines.integration.jei.BasicMachinesJEIPlugin"
     ]
   },
   "depends": {
@@ -32,6 +35,7 @@
     "architectury": ">=5"
   },
   "suggests": {
-    "jei": ">=11"
+    "jei": ">=11",
+    "wthit": ">=5"
   }
 }

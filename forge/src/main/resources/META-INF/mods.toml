@@ -24,14 +24,20 @@ versionRange = "[1.19,1.20)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.basicmachines]]
+modId = "architectury"
+mandatory = true
+versionRange = "[5,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.basicmachines]]
 modId = "jei"
 mandatory = false
 versionRange = "[11,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.basicmachines]]
-modId = "architectury"
-mandatory = true
+modId = "wthit"
+mandatory = false
 versionRange = "[5,)"
-ordering = "AFTER"
+ordering = "NONE"
 side = "BOTH"

@@ -40,7 +40,7 @@ dependencies {
     modRuntimeOnly "mcp.mobius.waila:wthit:forge-${wthit_version}"
     modRuntimeOnly "lol.bai:badpackets:forge-${badpackets_version}"
 
-	modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }

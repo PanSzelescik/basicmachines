@@ -51,10 +51,12 @@ jobs:
           modrinth-dependencies: |
             architectury-api | depends
             roughly-enough-items | suggests
+            wthit | suggests
           curseforge-dependencies: |
             architectury-api | depends
             jei | suggests
             roughly-enough-items | suggests
+            wthit-forge | suggests
 
           loaders: |
             forge
@@ -90,11 +92,13 @@ jobs:
             architectury-api | depends
             fabric-api | depends
             roughly-enough-items | suggests
+            wthit | suggests
           curseforge-dependencies: |
             architectury-api | depends
             fabric-api | depends
             jei | suggests
             roughly-enough-items | suggests
+            wthit | suggests
 
           loaders: |
             fabric

@@ -39,8 +39,8 @@ dependencies {
 
     modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${wthit_version}"
     modRuntimeOnly "lol.bai:badpackets:fabric-${badpackets_version}"
-	
-	modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}"
+
+    modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }

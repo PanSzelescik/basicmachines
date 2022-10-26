@@ -17,4 +17,8 @@ public class BasicMachinesPlatformImpl {
     public static <R extends Recipe<Container>> MachineBlockEntityCreator<R> getMachineBlockEntityCreator() {
         return MachineBlockEntityFabric::new;
     }
+
+    public static String getEnergyType() {
+        return "E";
+    }
 }

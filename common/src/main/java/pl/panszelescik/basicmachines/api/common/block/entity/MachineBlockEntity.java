@@ -24,25 +24,29 @@ import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineCont
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 
-import java.util.Optional;
-
 public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity implements IMachineContainer, MenuProvider, IMachineEnergyStorage {
 
-    private static final String PROGRESS_TIME = "ProgressTime";
-    private static final String CURRENT_ENERGY = "CurrentEnergy";
+    public static final String ITEMS = "Items";
+    public static final String PROGRESS = "Progress";
+    public static final String PROCESSING_TIME = "Total";
+    public static final String ENERGY = "Energy";
+    public static final String MAX_ENERGY = "MaxEnergy";
 
-    private final NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
     private final MachineType<R> machineType;
+    private final NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
+    private final Component component;
     private final ContainerData dataAccess;
     private R lastRecipe;
     private int progressTime;
     private int currentEnergy;
     private boolean slotChanged = true;
     private boolean changedInTick = false;
+    private boolean isProcessing = false;
 
     public MachineBlockEntity(MachineType<R> machineType, BlockPos blockPos, BlockState blockState) {
         super(machineType.getBlockEntityType(), blockPos, blockState);
         this.machineType = machineType;
+        this.component = Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.machineType.getName());
         this.dataAccess = new ContainerData() {
             public int get(int i) {
                 switch (i) {
@@ -91,16 +95,16 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         ContainerHelper.loadAllItems(compoundTag, this.items);
-        this.progressTime = compoundTag.getShort(PROGRESS_TIME);
-        this.currentEnergy = compoundTag.getInt(CURRENT_ENERGY);
+        this.progressTime = compoundTag.getShort(PROGRESS);
+        this.currentEnergy = compoundTag.getInt(ENERGY);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.items);
-        compoundTag.putShort(PROGRESS_TIME, (short) this.progressTime);
-        compoundTag.putInt(CURRENT_ENERGY, this.currentEnergy);
+        compoundTag.putShort(PROGRESS, (short) this.progressTime);
+        compoundTag.putInt(ENERGY, this.currentEnergy);
     }
 
     @Override
@@ -111,6 +115,10 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     @Override
     public CompoundTag getUpdateTag() {
         return this.saveWithoutMetadata();
+    }
+
+    public int getProgress() {
+        return this.progressTime;
     }
 
     private void setChangedInTick() {
@@ -130,7 +138,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.machineType.getMachineName());
+        return this.component;
     }
 
     @Override
@@ -138,13 +146,13 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         return new MachineContainerMenu<>(syncId, inventory, this.machineType, this);
     }
 
-    private Optional<R> findRecipe() {
+    private boolean findRecipe() {
         if (this.lastRecipe != null && this.lastRecipe.matches(this, this.level)) {
-            return Optional.of(this.lastRecipe);
+            return true;
         }
 
         if (!this.slotChanged) {
-            return Optional.empty();
+            return false;
         }
 
         var recipe = this.machineType.getRecipeManager().getRecipeFor(this, this.level);
@@ -152,47 +160,43 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
             this.progressTime = 0;
             this.lastRecipe = r;
         });
-        return recipe;
+        return recipe.isPresent();
     }
 
-    private Optional<R> canProcess() {
+    private boolean canProcess() {
         if (this.items.get(0).isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
-        var recipe = this.findRecipe();
-        if (recipe.isEmpty()) {
-            return Optional.empty();
+        var foundRecipe = this.findRecipe();
+        if (!foundRecipe) {
+            return false;
         }
 
         if (this.getCurrentEnergy() < this.getEnergyUsagePerTick()) {
-            return Optional.empty();
+            return false;
         }
 
-        var result = recipe.get().assemble(this);
+        var result = this.lastRecipe.assemble(this);
         if (result.isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
         var output = this.items.get(1);
         if (output.isEmpty()) {
-            return recipe;
+            return true;
         }
 
         if (!output.sameItem(result)) {
-            return Optional.empty();
+            return false;
         }
 
-        if (output.getCount() + result.getCount() <= output.getMaxStackSize()) {
-            return recipe;
-        }
-
-        return Optional.empty();
+        return output.getCount() + result.getCount() <= output.getMaxStackSize();
     }
 
-    private void checkProgress(R recipe) {
-        if (this.progressTime >= this.machineType.getProcessingTime(recipe)) {
-            this.process(recipe);
+    private void checkProgress() {
+        if (this.progressTime >= this.getProcessingTime()) {
+            this.process();
             this.hardReset();
         }
 
@@ -201,8 +205,8 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         this.setChangedInTick();
     }
 
-    private void process(R recipe) {
-        var result = recipe.assemble(this);
+    private void process() {
+        var result = this.lastRecipe.assemble(this);
         var outputSlot = this.getItem(1);
         if (outputSlot.isEmpty()) {
             this.setItem(1, result);
@@ -211,6 +215,9 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
             this.getItem(0).shrink(1);
             outputSlot.grow(result.getCount());
         }
+    }
+    public int getProcessingTime() {
+        return this.isProcessing ? this.machineType.getProcessingTime(this.lastRecipe) : -1;
     }
 
     private void hardReset() {
@@ -233,8 +240,13 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     public static <R extends Recipe<Container>> void serverTick(Level level, BlockPos blockPos, BlockState blockState, MachineBlockEntity<R> machineBlockEntity) {
-        machineBlockEntity.canProcess()
-                .ifPresentOrElse(machineBlockEntity::checkProgress, machineBlockEntity::softReset);
+        if (machineBlockEntity.canProcess()) {
+            machineBlockEntity.isProcessing = true;
+            machineBlockEntity.checkProgress();
+        } else {
+            machineBlockEntity.isProcessing = false;
+            machineBlockEntity.softReset();
+        }
 
         machineBlockEntity.slotChanged = false;
 

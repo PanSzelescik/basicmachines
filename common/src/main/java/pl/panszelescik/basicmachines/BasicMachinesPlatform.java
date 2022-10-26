@@ -18,4 +18,9 @@ public class BasicMachinesPlatform {
     public static <R extends Recipe<Container>> MachineBlockEntityCreator<R> getMachineBlockEntityCreator() {
         throw new AssertionError();
     }
+
+    @ExpectPlatform
+    public static String getEnergyType() {
+        throw new AssertionError();
+    }
 }

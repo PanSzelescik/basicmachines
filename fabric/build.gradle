@@ -24,6 +24,7 @@ configurations {
 repositories {
     maven { url "https://dvs1.progwml6.com/files/maven/" }
     maven { url "https://modmaven.dev" }
+    maven { url "https://maven.bai.lol" }
 }
 
 dependencies {
@@ -35,6 +36,9 @@ dependencies {
     include modApi("teamreborn:energy:${rootProject.fabric_energy_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${wthit_version}"
+    modRuntimeOnly "lol.bai:badpackets:fabric-${badpackets_version}"
 	
 	modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}"
 

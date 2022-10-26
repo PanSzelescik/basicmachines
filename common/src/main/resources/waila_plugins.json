@@ -1,1 +1,6 @@
-{}
+{
+  "basicmachines:plugin": {
+    "initializer": "pl.panszelescik.basicmachines.integration.wthit.BasicMachinesWailaPlugin",
+    "side": "*"
+  }
+}

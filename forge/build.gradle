@@ -29,13 +29,17 @@ configurations {
 repositories {
     maven { url "https://dvs1.progwml6.com/files/maven/" }
     maven { url "https://modmaven.dev" }
+    maven { url "https://maven.bai.lol" }
 }
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
-	
+
+    modRuntimeOnly "mcp.mobius.waila:wthit:forge-${wthit_version}"
+    modRuntimeOnly "lol.bai:badpackets:forge-${badpackets_version}"
+
 	modRuntimeOnly "mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -29,7 +30,7 @@ public class MachineType<R extends Recipe<Container>> {
 
     public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();
 
-    private final String name;
+    private final ResourceLocation resourceLocation;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;
     private final int[] inputSlots;
     private final int[] outputSlots;
@@ -40,15 +41,19 @@ public class MachineType<R extends Recipe<Container>> {
     private RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
 
     public MachineType(String name, RecipeType<R> recipeType, int[] inputSlots, int[] outputSlots, ToIntFunction<R> processingTimeFunction) {
-        this.name = name;
+        this.resourceLocation = new ResourceLocation(BasicMachinesMod.MOD_ID, name);
         this.recipeManager = RecipeManager.createCheck(recipeType);
         this.inputSlots = inputSlots;
         this.outputSlots = outputSlots;
         this.processingTimeFunction = Objects.requireNonNullElseGet(processingTimeFunction, () -> r -> 200);
     }
 
-    public String getMachineName() {
-        return this.name;
+    public ResourceLocation getResourceLocation() {
+        return this.resourceLocation;
+    }
+
+    public String getName() {
+        return this.resourceLocation.getPath();
     }
 
     public RecipeManager.CachedCheck<Container, R> getRecipeManager() {
@@ -99,7 +104,7 @@ public class MachineType<R extends Recipe<Container>> {
 
     // Registering
     private void registerBlock() {
-        this.block = BasicMachinesMod.BLOCKS.register(this.getMachineName(), () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
+        this.block = BasicMachinesMod.BLOCKS.register(this.resourceLocation, () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
     }
 
     private void registerBlockItem() {
@@ -107,11 +112,11 @@ public class MachineType<R extends Recipe<Container>> {
     }
 
     private void registerBlockEntityType() {
-        this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.getMachineName(), () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
+        this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.resourceLocation, () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
     }
 
     private void registerMenuType() {
-        this.menuType = BasicMachinesMod.MENU_TYPES.register(this.getMachineName(), () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
+        this.menuType = BasicMachinesMod.MENU_TYPES.register(this.resourceLocation, () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
     }
 
     private void register() {

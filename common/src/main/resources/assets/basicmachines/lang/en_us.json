@@ -1,5 +1,7 @@
 {
   "itemGroup.basicmachines.creative_tab": "Basic Machines",
 
-  "block.basicmachines.electric_furnace": "Electric Furnace"
+  "block.basicmachines.electric_furnace": "Electric Furnace",
+
+  "tooltip.basicmachines.energy": "%s/%s %s"
 }

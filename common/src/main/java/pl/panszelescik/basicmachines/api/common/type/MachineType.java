@@ -27,7 +27,7 @@ public class MachineType<R extends Recipe<Container>> {
     public static final int[] INPUT_SLOTS = new int[]{0};
     public static final int[] OUTPUT_SLOTS = new int[]{1};
 
-    public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();;
+    public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();
 
     private final String name;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;

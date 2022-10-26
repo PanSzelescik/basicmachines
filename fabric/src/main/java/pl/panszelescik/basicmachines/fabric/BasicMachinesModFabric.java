@@ -15,6 +15,8 @@ public class BasicMachinesModFabric implements ModInitializer {
     }
 
     public static void registerEnergyStorage() {
-        EnergyStorage.SIDED.registerForBlockEntity((myBlockEntity, direction) -> ((MachineBlockEntityFabric) myBlockEntity).energyStorage, MachineType.ELECTRIC_FURNACE.getBlockEntityType());
+        MachineType.MACHINE_TYPES.forEach(machineType -> {
+            EnergyStorage.SIDED.registerForBlockEntity((myBlockEntity, direction) -> ((MachineBlockEntityFabric) myBlockEntity).energyStorage, machineType.getBlockEntityType());
+        });
     }
 }

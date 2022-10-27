@@ -2,6 +2,11 @@
   "itemGroup.basicmachines.creative_tab": "Basic Machines",
 
   "block.basicmachines.electric_furnace": "Electric Furnace",
+  "block.basicmachines.electric_blast_furnace": "Electric Blast Furnace",
+  "block.basicmachines.electric_smoker": "Electric Smoker",
+
+  "item.basicmachines.speed_upgrade": "Speed Upgrade",
+  "item.basicmachines.energy_upgrade": "Energy Upgrade",
 
   "tooltip.basicmachines.energy": "%s/%s %s"
 }

@@ -5,13 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 
 public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<?>> {
-
-    private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/dispenser.png");
 
     public MachineScreen(MachineContainerMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
@@ -21,10 +18,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
     protected void renderBg(PoseStack poseStack, float f, int i, int j) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        var x = (this.width - this.imageWidth) / 2;
-        var y = (this.height - this.imageHeight) / 2;
-        this.blit(poseStack, x, y, 0, 0, this.imageWidth, this.imageHeight);
+        RenderSystem.setShaderTexture(0, this.menu.machineType.getSlotHolder().getTexture());
+        this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        var p = this.menu.getArrowProgress();
+        System.out.println(p);
+        this.blit(poseStack, this.leftPos + 79, this.topPos + 34, this.imageWidth, 14, this.imageWidth + 1 + p, 16);
     }
 
     @Override

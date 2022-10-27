@@ -20,5 +20,7 @@ public class BasicMachinesJEIPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_FURNACE.getItemStack(), RecipeTypes.SMELTING);
+        registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_BLAST_FURNACE.getItemStack(), RecipeTypes.BLASTING);
+        registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_SMOKER.getItemStack(), RecipeTypes.SMOKING);
     }
 }

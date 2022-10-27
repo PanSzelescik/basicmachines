@@ -7,6 +7,8 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
+import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
+import pl.panszelescik.basicmachines.api.common.type.SlotType;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -15,7 +17,9 @@ public interface IMachineContainer extends WorldlyContainer {
 
     NonNullList<ItemStack> getItems();
 
-    static IMachineContainer of(NonNullList<ItemStack> items, int[] inputSlots, int[] outputSlots) {
+    SlotHolder getSlotHolder();
+
+    static IMachineContainer of(NonNullList<ItemStack> items, SlotHolder slotHolder) {
         return new IMachineContainer() {
             @Override
             public NonNullList<ItemStack> getItems() {
@@ -23,23 +27,18 @@ public interface IMachineContainer extends WorldlyContainer {
             }
 
             @Override
-            public int[] getInputSlots() {
-                return inputSlots;
-            }
-
-            @Override
-            public int[] getOutputSlots() {
-                return outputSlots;
+            public SlotHolder getSlotHolder() {
+                return slotHolder;
             }
         };
     }
 
-    static IMachineContainer ofSize(int size, int[] inputSlots, int[] outputSlots) {
-        return of(NonNullList.withSize(size, ItemStack.EMPTY), inputSlots, outputSlots);
+    static IMachineContainer fromSlotHolder(SlotHolder slotHolder) {
+        return of(NonNullList.withSize(slotHolder.getCount(), ItemStack.EMPTY), slotHolder);
     }
 
     static IMachineContainer fromMachineType(MachineType<?> machineType) {
-        return ofSize(machineType.slotsAmount(), machineType.getInputSlots(), machineType.getOutputSlots());
+        return fromSlotHolder(machineType.getSlotHolder());
     }
 
     @Override
@@ -107,40 +106,25 @@ public interface IMachineContainer extends WorldlyContainer {
 
     @Override
     default int[] getSlotsForFace(Direction direction) {
-        return getAllSlots().toArray();
-    }
-
-    default boolean canPlaceItem(int i) {
-        return Arrays.stream(getInputSlots()).anyMatch(inputSlot -> inputSlot == i);
+        return getSlotHolder().getSlots();
     }
 
     @Override
     default boolean canPlaceItem(int i, ItemStack itemStack) {
-        return canPlaceItem(i);
+        return getSlotHolder().getSlot(i).canAutoInsert(itemStack);
     }
 
     @Override
     default boolean canPlaceItemThroughFace(int i, ItemStack itemStack, Direction direction) {
-        return canPlaceItem(i);
+        return canPlaceItem(i, itemStack);
     }
 
     default boolean canTakeItem(int i) {
-        return Arrays.stream(getOutputSlots()).anyMatch(outputSlot -> outputSlot == i);
+        return getSlotHolder().getSlot(i).canAutoExtract();
     }
 
     @Override
     default boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
         return canTakeItem(i);
     }
-
-    default IntStream getAllSlots() {
-        return IntStream.concat(
-                Arrays.stream(getInputSlots()),
-                Arrays.stream(getOutputSlots())
-        );
-    }
-
-    int[] getInputSlots();
-
-    int[] getOutputSlots();
 }

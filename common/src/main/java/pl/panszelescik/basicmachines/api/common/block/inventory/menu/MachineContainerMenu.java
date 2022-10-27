@@ -3,35 +3,41 @@ package pl.panszelescik.basicmachines.api.common.block.inventory.menu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
-import pl.panszelescik.basicmachines.api.common.block.inventory.menu.slot.MachineOutputSlot;
+import pl.panszelescik.basicmachines.api.common.type.MachineSlot;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 
 public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractContainerMenu {
 
+    public final MachineType<R> machineType;
     private final IMachineContainer container;
+    private final ContainerData data;
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType) {
-        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType));
+        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType), new SimpleContainerData(4));
     }
 
-    public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType, IMachineContainer container) {
+    public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType, IMachineContainer container, ContainerData containerData) {
         super(machineType.getMenuType(), syncId);
-        checkContainerSize(container, machineType.slotsAmount());
+        checkContainerSize(container, machineType.getSlotHolder().getCount());
+        checkContainerDataCount(containerData, 4);
+        this.machineType = machineType;
         this.container = container;
+        this.data = containerData;
         inventory.startOpen(inventory.player);
 
-        this.addMachineSlots();
+        this.addMachineSlots(machineType);
         this.addPlayerSlots(inventory);
     }
 
-    private void addMachineSlots() {
-        this.addSlot(new Slot(this.container, 0, 62, 17));
-        this.addSlot(new MachineOutputSlot(this.container, 1, 62, 35));
+    private void addMachineSlots(MachineType<R> machineType) {
+        machineType.getSlotHolder()
+                .getSlotsStream()
+                .map(slot -> slot.toMenuSlot(this.container))
+                .forEach(this::addSlot);
     }
 
     private void addPlayerSlots(Inventory inventory) {
@@ -41,13 +47,13 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         // Player Inventory
         for (m = 0; m < 3; ++m) {
             for (l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(inventory, l + m * 9 + 9, 8 + l * 18, 84 + m * 18));
+                this.addSlot(new Slot(inventory, l + m * 9 + 9, 8 + l * MachineSlot.SIZE, 84 + m * MachineSlot.SIZE));
             }
         }
 
         // Player Hotbar
         for (m = 0; m < 9; ++m) {
-            this.addSlot(new Slot(inventory, m, 8 + m * 18, 142));
+            this.addSlot(new Slot(inventory, m, 8 + m * MachineSlot.SIZE, 142));
         }
     }
 
@@ -81,5 +87,30 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
     @Override
     public boolean stillValid(Player player) {
         return this.container.stillValid(player);
+    }
+
+    public int getProgress() {
+        return this.data.get(0);
+    }
+
+    public int getProcessingTime() {
+        return this.data.get(1);
+    }
+
+    public int getCurrentEnergy() {
+        return this.data.get(2);
+    }
+
+    public int getMaxEnergy() {
+        return this.data.get(3);
+    }
+
+    public int getArrowProgress() {
+        float progress = this.getProgress();
+        float total = this.getProcessingTime();
+        if (total <= 0 || progress <= 0) {
+            return 0;
+        }
+        return (int) (progress / total / 24);
     }
 }

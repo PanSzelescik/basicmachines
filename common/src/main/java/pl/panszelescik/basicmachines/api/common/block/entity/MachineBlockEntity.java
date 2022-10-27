@@ -23,6 +23,7 @@ import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContaine
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
 
 public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity implements IMachineContainer, MenuProvider, IMachineEnergyStorage {
 
@@ -33,7 +34,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     public static final String MAX_ENERGY = "MaxEnergy";
 
     private final MachineType<R> machineType;
-    private final NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> items;
     private final Component component;
     private final ContainerData dataAccess;
     private R lastRecipe;
@@ -46,14 +47,19 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     public MachineBlockEntity(MachineType<R> machineType, BlockPos blockPos, BlockState blockState) {
         super(machineType.getBlockEntityType(), blockPos, blockState);
         this.machineType = machineType;
+        this.items = NonNullList.withSize(machineType.getSlotHolder().getCount(), ItemStack.EMPTY);
         this.component = Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.machineType.getName());
         this.dataAccess = new ContainerData() {
             public int get(int i) {
                 switch (i) {
                     case 0:
-                        return MachineBlockEntity.this.progressTime;
+                        return MachineBlockEntity.this.getProgress();
                     case 1:
-                        return MachineBlockEntity.this.currentEnergy;
+                        return MachineBlockEntity.this.getProcessingTime();
+                    case 2:
+                        return MachineBlockEntity.this.getCurrentEnergy();
+                    case 3:
+                        return MachineBlockEntity.this.getMaxEnergy();
                     default:
                         return 0;
                 }
@@ -65,13 +71,17 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
                         MachineBlockEntity.this.progressTime = j;
                         break;
                     case 1:
+                        break;
+                    case 2:
                         MachineBlockEntity.this.currentEnergy = j;
+                        break;
+                    case 3:
                         break;
                 }
             }
 
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
     }
@@ -82,13 +92,8 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     @Override
-    public int[] getInputSlots() {
-        return this.machineType.getInputSlots();
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return this.machineType.getOutputSlots();
+    public SlotHolder getSlotHolder() {
+        return this.machineType.getSlotHolder();
     }
 
     @Override
@@ -143,7 +148,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
 
     @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory inventory, Player player) {
-        return new MachineContainerMenu<>(syncId, inventory, this.machineType, this);
+        return new MachineContainerMenu<>(syncId, inventory, this.machineType, this, this.dataAccess);
     }
 
     private boolean findRecipe() {
@@ -216,6 +221,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
             outputSlot.grow(result.getCount());
         }
     }
+
     public int getProcessingTime() {
         return this.isProcessing ? this.machineType.getProcessingTime(this.lastRecipe) : -1;
     }

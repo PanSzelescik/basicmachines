@@ -10,12 +10,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
+import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
 
 public class BasicMachinesMod {
 
@@ -23,13 +22,15 @@ public class BasicMachinesMod {
 
     public static final CreativeModeTab CREATIVE_TAB;
 
-    public static final DeferredRegister<Block> BLOCKS;
-    public static final DeferredRegister<Item> ITEMS;
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES;
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES;
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.BLOCK_REGISTRY);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.ITEM_REGISTRY);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.MENU_REGISTRY);
 
-    public static final MachineType<SmeltingRecipe> ELECTRIC_FURNACE = new MachineType<>("electric_furnace", RecipeType.SMELTING, MachineType.INPUT_SLOTS, MachineType.OUTPUT_SLOTS, AbstractCookingRecipe::getCookingTime);
-    
+    public static final MachineType<SmeltingRecipe> ELECTRIC_FURNACE = new MachineType<>("electric_furnace", RecipeType.SMELTING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
+    public static final MachineType<BlastingRecipe> ELECTRIC_BLAST_FURNACE = new MachineType<>("electric_blast_furnace", RecipeType.BLASTING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
+    public static final MachineType<SmokingRecipe> ELECTRIC_SMOKER = new MachineType<>("electric_smoker", RecipeType.SMOKING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
+
     public static void init() {
         BLOCKS.register();
         ITEMS.register();
@@ -46,14 +47,9 @@ public class BasicMachinesMod {
     }
 
     static {
-        BLOCKS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.BLOCK_REGISTRY);
-        ITEMS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.ITEM_REGISTRY);
-        BLOCK_ENTITY_TYPES = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
-        MENU_TYPES = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.MENU_REGISTRY);
-
         MachineType.MACHINE_TYPES.add(ELECTRIC_FURNACE);
-
-        MachineType.registerAll();
+        MachineType.MACHINE_TYPES.add(ELECTRIC_BLAST_FURNACE);
+        MachineType.MACHINE_TYPES.add(ELECTRIC_SMOKER);
 
         CREATIVE_TAB = CreativeTabRegistry.create(new ResourceLocation(MOD_ID, "creative_tab"), () ->
                 new ItemStack(ELECTRIC_FURNACE.getBlockItem()));

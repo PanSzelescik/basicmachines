@@ -1,7 +1,7 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "front": "block/furnace",
+    "front": "block/blast_furnace",
     "side": "block/iron_block",
     "top": "block/iron_block"
   }

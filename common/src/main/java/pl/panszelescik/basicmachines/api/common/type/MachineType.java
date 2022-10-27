@@ -26,27 +26,27 @@ import java.util.function.ToIntFunction;
 
 public class MachineType<R extends Recipe<Container>> {
 
-    public static final int[] INPUT_SLOTS = new int[]{0};
-    public static final int[] OUTPUT_SLOTS = new int[]{1};
-
     public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();
 
     private final ResourceLocation resourceLocation;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;
-    private final int[] inputSlots;
-    private final int[] outputSlots;
+    private final SlotHolder slotHolder;
     private final ToIntFunction<R> processingTimeFunction;
     private RegistrySupplier<MachineBlock<R>> block;
     private RegistrySupplier<BlockItem> blockItem;
     private RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
     private RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
 
-    public MachineType(String name, RecipeType<R> recipeType, int[] inputSlots, int[] outputSlots, ToIntFunction<R> processingTimeFunction) {
+    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, ToIntFunction<R> processingTimeFunction) {
         this.resourceLocation = new ResourceLocation(BasicMachinesMod.MOD_ID, name);
         this.recipeManager = RecipeManager.createCheck(recipeType);
-        this.inputSlots = inputSlots;
-        this.outputSlots = outputSlots;
+        this.slotHolder = slotHolder;
         this.processingTimeFunction = Objects.requireNonNullElseGet(processingTimeFunction, () -> r -> 200);
+
+        this.registerBlock();
+        this.registerBlockItem();
+        this.registerBlockEntityType();
+        this.registerMenuType();
     }
 
     public ResourceLocation getResourceLocation() {
@@ -61,16 +61,8 @@ public class MachineType<R extends Recipe<Container>> {
         return this.recipeManager;
     }
 
-    public int[] getInputSlots() {
-        return this.inputSlots;
-    }
-
-    public int[] getOutputSlots() {
-        return this.outputSlots;
-    }
-
-    public int slotsAmount() {
-        return this.getInputSlots().length + this.getOutputSlots().length;
+    public SlotHolder getSlotHolder() {
+        return this.slotHolder;
     }
 
     public MachineBlock<R> getBlock() {
@@ -109,7 +101,7 @@ public class MachineType<R extends Recipe<Container>> {
 
     // Registering
     private void registerBlock() {
-        this.block = BasicMachinesMod.BLOCKS.register(this.resourceLocation, () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
+        this.block = BasicMachinesMod.BLOCKS.register(this.getResourceLocation(), () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
     }
 
     private void registerBlockItem() {
@@ -117,26 +109,15 @@ public class MachineType<R extends Recipe<Container>> {
     }
 
     private void registerBlockEntityType() {
-        this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.resourceLocation, () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
+        this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.getResourceLocation(), () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
     }
 
     private void registerMenuType() {
-        this.menuType = BasicMachinesMod.MENU_TYPES.register(this.resourceLocation, () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
-    }
-
-    private void register() {
-        this.registerBlock();
-        this.registerBlockItem();
-        this.registerBlockEntityType();
-        this.registerMenuType();
+        this.menuType = BasicMachinesMod.MENU_TYPES.register(this.getResourceLocation(), () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
     }
 
     private void registerClient() {
         MenuScreens.register(this.getMenuType(), MachineScreen::new);
-    }
-
-    public static void registerAll() {
-        MACHINE_TYPES.forEach(MachineType::register);
     }
 
     public static void registerAllClient() {

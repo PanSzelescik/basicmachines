@@ -9,14 +9,16 @@ import net.minecraft.world.Container;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import pl.panszelescik.basicmachines.api.client.screen.MachineScreen;
-import pl.panszelescik.basicmachines.BasicMachinesPlatform;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.BasicMachinesPlatform;
+import pl.panszelescik.basicmachines.api.client.screen.MachineScreen;
 import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
 import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
@@ -47,6 +49,10 @@ public class MachineType<R extends Recipe<Container>> {
         this.registerBlockItem();
         this.registerBlockEntityType();
         this.registerMenuType();
+    }
+
+    public static void registerAllClient() {
+        MACHINE_TYPES.forEach(MachineType::registerClient);
     }
 
     public ResourceLocation getResourceLocation() {
@@ -118,9 +124,5 @@ public class MachineType<R extends Recipe<Container>> {
 
     private void registerClient() {
         MenuScreens.register(this.getMenuType(), MachineScreen::new);
-    }
-
-    public static void registerAllClient() {
-        MACHINE_TYPES.forEach(MachineType::registerClient);
     }
 }

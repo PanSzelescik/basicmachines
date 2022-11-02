@@ -1,6 +1,7 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 
@@ -10,7 +11,7 @@ import java.util.stream.Stream;
 
 public enum SlotHolder {
 
-    ONE_INPUT_ONE_OUTPUT(holder -> holder
+    ONE_INPUT_ONE_OUTPUT(builder -> builder
             .addSlot(slot -> slot
                     .setInput()
                     .setX(56)
@@ -18,7 +19,27 @@ public enum SlotHolder {
             .addSlot(slot -> slot
                     .setOutput()
                     .setX(x -> x + 60)
-                    .setPreviousY()),
+                    .setPreviousY())
+            .addSlot(slot -> slot
+                    .setEnergy()
+                    .setX(8)
+                    .setY(62))
+            .addSlot(slot -> slot
+                    .setUpgrade()
+                    .setX(152)
+                    .setY(8))
+            .addSlot(slot -> slot
+                    .setUpgrade()
+                    .setPreviousX()
+                    .setY(y -> y + MachineSlot.SIZE))
+            .addSlot(slot -> slot
+                    .setUpgrade()
+                    .setPreviousX()
+                    .setY(y -> y + MachineSlot.SIZE))
+            .addSlot(slot -> slot
+                    .setUpgrade()
+                    .setPreviousX()
+                    .setY(y -> y + MachineSlot.SIZE)),
             BasicMachinesMod.id("textures/gui/container/one_input_one_output.png")),
     ;
 
@@ -26,8 +47,8 @@ public enum SlotHolder {
     private final Map<SlotType, List<MachineSlot>> slots;
     private final int slotsCount;
 
-    SlotHolder(Function<SlotHolder.Builder, SlotHolder.Builder> holder, ResourceLocation texture) {
-        this(holder.apply(new SlotHolder.Builder()), texture);
+    SlotHolder(Function<SlotHolder.Builder, SlotHolder.Builder> builder, ResourceLocation texture) {
+        this(builder.apply(new SlotHolder.Builder()), texture);
     }
 
     SlotHolder(SlotHolder.Builder builder, ResourceLocation texture) {

@@ -8,16 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
-import pl.panszelescik.basicmachines.api.common.type.SlotType;
-
-import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public interface IMachineContainer extends WorldlyContainer {
-
-    NonNullList<ItemStack> getItems();
-
-    SlotHolder getSlotHolder();
 
     static IMachineContainer of(NonNullList<ItemStack> items, SlotHolder slotHolder) {
         return new IMachineContainer() {
@@ -40,6 +32,10 @@ public interface IMachineContainer extends WorldlyContainer {
     static IMachineContainer fromMachineType(MachineType<?> machineType) {
         return fromSlotHolder(machineType.getSlotHolder());
     }
+
+    NonNullList<ItemStack> getItems();
+
+    SlotHolder getSlotHolder();
 
     @Override
     default int getContainerSize() {

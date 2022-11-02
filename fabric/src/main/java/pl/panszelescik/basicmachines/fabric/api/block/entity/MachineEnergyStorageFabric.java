@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import pl.panszelescik.basicmachines.api.common.util.Numbers;
 import team.reborn.energy.api.EnergyStorage;
 
 public class MachineEnergyStorageFabric<R extends Recipe<Container>> extends SnapshotParticipant<Long> implements EnergyStorage {
@@ -38,7 +39,7 @@ public class MachineEnergyStorageFabric<R extends Recipe<Container>> extends Sna
             return 0;
         }
 
-        var inserted = (int) Math.max(0, Math.min(this.getCapacity() - this.getAmount(), Math.min(this.machineBlockEntity.getInputMaxEnergy(), Math.min(Integer.MAX_VALUE, maxAmount))));
+        var inserted = (int) Math.max(0, Math.min(this.getCapacity() - this.getAmount(), Math.min(this.machineBlockEntity.getInputMaxEnergy(), Numbers.safeInt(maxAmount))));
         if (inserted > 0) {
             updateSnapshots(transaction);
             this.machineBlockEntity.incrementEnergy(inserted);
@@ -60,7 +61,7 @@ public class MachineEnergyStorageFabric<R extends Recipe<Container>> extends Sna
             return 0;
         }
 
-        var extracted = (int) Math.max(0, Math.min(this.machineBlockEntity.getOutputMaxEnergy(), Math.min(this.getAmount(), Math.min(Integer.MAX_VALUE, maxAmount))));
+        var extracted = (int) Math.max(0, Math.min(this.machineBlockEntity.getOutputMaxEnergy(), Math.min(this.getAmount(), Numbers.safeInt(maxAmount))));
         if (extracted > 0) {
             updateSnapshots(transaction);
             this.machineBlockEntity.decrementEnergy(extracted);

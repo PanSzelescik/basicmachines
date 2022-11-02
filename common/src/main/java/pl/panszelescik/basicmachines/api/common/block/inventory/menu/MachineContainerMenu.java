@@ -3,7 +3,10 @@ package pl.panszelescik.basicmachines.api.common.block.inventory.menu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
@@ -61,6 +64,7 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         }
     }
 
+    // TODO - Remove shift click to output slot and respect max stack size in upgrade and energy slots
     @Override
     public ItemStack quickMoveStack(Player player, int invSlot) {
         var newStack = ItemStack.EMPTY;

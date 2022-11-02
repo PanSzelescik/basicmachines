@@ -1,6 +1,7 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
 import net.minecraft.world.item.ItemStack;
+import pl.panszelescik.basicmachines.BasicMachinesPlatform;
 import pl.panszelescik.basicmachines.api.common.item.UpgradeItem;
 
 import java.util.function.Predicate;
@@ -10,6 +11,7 @@ public enum SlotType {
     INPUT(true, true, false),
     OUTPUT(false, false, true),
     UPGRADE(UpgradeItem::isUpgrade, false, false),
+    ENERGY(BasicMachinesPlatform::isBatteryItem, false, false),
     ;
 
     public final Predicate<ItemStack> canInsert; // Can Player insert items in GUI
@@ -17,7 +19,7 @@ public enum SlotType {
     public final boolean canAutoInsert; // Can Pipes insert items
     public final boolean canAutoExtract; // Can Pipes extract items
 
-    SlotType(boolean canInsert,boolean canAutoInsert, boolean canAutoExtract) {
+    SlotType(boolean canInsert, boolean canAutoInsert, boolean canAutoExtract) {
         this(s -> canInsert, canAutoInsert, canAutoExtract);
     }
 

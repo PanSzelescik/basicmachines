@@ -19,11 +19,14 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.BasicMachinesPlatform;
+import pl.panszelescik.basicmachines.api.common.block.energy.IMachineEnergyStorage;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
-import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
+import pl.panszelescik.basicmachines.api.common.type.SlotType;
 
 public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity implements IMachineContainer, MenuProvider, IMachineEnergyStorage {
 
@@ -72,6 +75,25 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
                 return 5;
             }
         };
+    }
+
+    public static <R extends Recipe<Container>> void serverTick(Level level, BlockPos blockPos, BlockState blockState, MachineBlockEntity<R> machineBlockEntity) {
+        machineBlockEntity.takeEnergyFromItem();
+
+        if (machineBlockEntity.canProcess()) {
+            machineBlockEntity.isProcessing = true;
+            machineBlockEntity.checkProgress();
+        } else {
+            machineBlockEntity.isProcessing = false;
+            machineBlockEntity.softReset();
+        }
+
+        machineBlockEntity.slotChanged = false;
+
+        if (machineBlockEntity.changedInTick) {
+            machineBlockEntity.changedInTick = false;
+            machineBlockEntity.setChanged();
+        }
     }
 
     @Override
@@ -144,19 +166,33 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     @Override
+    public int getCurrentEnergy() {
+        return this.currentEnergy;
+    }
+
+    @Override
     public void setCurrentEnergy(int currentEnergy) {
         this.currentEnergy = currentEnergy;
         this.setChanged();
     }
 
     @Override
-    public int getCurrentEnergy() {
-        return this.currentEnergy;
-    }
-
-    @Override
     public int getMaxEnergy() {
         return 10000;
+    }
+
+    private void takeEnergyFromItem() {
+        var items = this.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            if (this.getSlotHolder().getSlot(i).slotType() == SlotType.ENERGY) {
+                var stack = items.get(i);
+                if (stack.isEmpty()) {
+                    return;
+                }
+
+                BasicMachinesPlatform.takeEnergyFromItem(this, stack);
+            }
+        }
     }
 
     private boolean findRecipe() {
@@ -250,23 +286,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         if (this.progressTime > 0) {
             this.progressTime--;
             this.setChangedInTick();
-        }
-    }
-
-    public static <R extends Recipe<Container>> void serverTick(Level level, BlockPos blockPos, BlockState blockState, MachineBlockEntity<R> machineBlockEntity) {
-        if (machineBlockEntity.canProcess()) {
-            machineBlockEntity.isProcessing = true;
-            machineBlockEntity.checkProgress();
-        } else {
-            machineBlockEntity.isProcessing = false;
-            machineBlockEntity.softReset();
-        }
-
-        machineBlockEntity.slotChanged = false;
-
-        if (machineBlockEntity.changedInTick) {
-            machineBlockEntity.changedInTick = false;
-            machineBlockEntity.setChanged();
         }
     }
 }

@@ -3,7 +3,6 @@ package pl.panszelescik.basicmachines.integration.wthit;
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
-import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.integration.wthit.provider.MachineProvider;

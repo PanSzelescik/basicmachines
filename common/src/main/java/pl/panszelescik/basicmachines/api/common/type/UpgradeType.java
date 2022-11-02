@@ -5,17 +5,19 @@ import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.item.UpgradeItem;
 
+import java.util.Locale;
+
 public enum UpgradeType {
 
     SPEED,
-    EFFICIENCY,
+    ENERGY,
     ;
 
     private final ResourceLocation resourceLocation;
     private RegistrySupplier<UpgradeItem> item;
 
     UpgradeType() {
-        this.resourceLocation = BasicMachinesMod.id(this.name() + "_upgrade");
+        this.resourceLocation = BasicMachinesMod.id(this.name().toLowerCase(Locale.ROOT) + "_upgrade");
 
         this.registerItem();
     }

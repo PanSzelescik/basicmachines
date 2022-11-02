@@ -1,12 +1,16 @@
-package pl.panszelescik.basicmachines.api.common.block.entity;
+package pl.panszelescik.basicmachines.api.common.block.energy;
 
 import java.util.function.IntUnaryOperator;
 
 public interface IMachineEnergyStorage {
 
+    int getCurrentEnergy();
+
     void setCurrentEnergy(int energy);
 
-    int getCurrentEnergy();
+    default void setCurrentEnergy(IntUnaryOperator operator) {
+        this.setCurrentEnergy(operator.applyAsInt(getCurrentEnergy()));
+    }
 
     int getMaxEnergy();
 
@@ -42,10 +46,6 @@ public interface IMachineEnergyStorage {
 
     default void decrementEnergy(int toDecrement) {
         this.setCurrentEnergy(energy -> energy - toDecrement);
-    }
-
-    default void setCurrentEnergy(IntUnaryOperator operator) {
-        this.setCurrentEnergy(operator.applyAsInt(getCurrentEnergy()));
     }
 
     default int getInputMaxEnergy() {

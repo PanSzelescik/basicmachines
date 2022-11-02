@@ -45,7 +45,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
         super.init();
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         this.arrowComponent.setPos(this.leftPos + 79, this.topPos + 34);
-        this.energyComponent.setPos(this.leftPos + 8, this.topPos + 20);
+        this.energyComponent.setPos(this.leftPos + 11, this.topPos + 18);
     }
 
     @Override
@@ -54,5 +54,11 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
 
         this.arrowComponent.renderTooltip(this, poseStack, i, j);
         this.energyComponent.renderTooltip(this, poseStack, i, j);
+    }
+
+    // Removes Inventory label
+    @Override
+    protected void renderLabels(PoseStack poseStack, int i, int j) {
+        this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
     }
 }

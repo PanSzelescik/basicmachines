@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
+import pl.panszelescik.basicmachines.api.common.type.UpgradeType;
 
 public class BasicMachinesMod {
 
@@ -30,6 +31,17 @@ public class BasicMachinesMod {
     public static final MachineType<SmeltingRecipe> ELECTRIC_FURNACE = new MachineType<>("electric_furnace", RecipeType.SMELTING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
     public static final MachineType<BlastingRecipe> ELECTRIC_BLAST_FURNACE = new MachineType<>("electric_blast_furnace", RecipeType.BLASTING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
     public static final MachineType<SmokingRecipe> ELECTRIC_SMOKER = new MachineType<>("electric_smoker", RecipeType.SMOKING, SlotHolder.ONE_INPUT_ONE_OUTPUT, AbstractCookingRecipe::getCookingTime);
+
+    static {
+        MachineType.MACHINE_TYPES.add(ELECTRIC_FURNACE);
+        MachineType.MACHINE_TYPES.add(ELECTRIC_BLAST_FURNACE);
+        MachineType.MACHINE_TYPES.add(ELECTRIC_SMOKER);
+
+        UpgradeType.values();
+
+        CREATIVE_TAB = CreativeTabRegistry.create(id("creative_tab"), () ->
+                new ItemStack(ELECTRIC_FURNACE.getBlockItem()));
+    }
 
     public static void init() {
         BLOCKS.register();
@@ -48,14 +60,5 @@ public class BasicMachinesMod {
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(BasicMachinesMod.MOD_ID, path);
-    }
-
-    static {
-        MachineType.MACHINE_TYPES.add(ELECTRIC_FURNACE);
-        MachineType.MACHINE_TYPES.add(ELECTRIC_BLAST_FURNACE);
-        MachineType.MACHINE_TYPES.add(ELECTRIC_SMOKER);
-
-        CREATIVE_TAB = CreativeTabRegistry.create(id("creative_tab"), () ->
-                new ItemStack(ELECTRIC_FURNACE.getBlockItem()));
     }
 }

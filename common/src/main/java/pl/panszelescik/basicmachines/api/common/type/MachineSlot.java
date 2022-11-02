@@ -54,6 +54,10 @@ public record MachineSlot(SlotType slotType, int id, int x, int y) {
             return this.setSlotType(SlotType.UPGRADE);
         }
 
+        public Builder setEnergy() {
+            return this.setSlotType(SlotType.ENERGY);
+        }
+
         public Builder setX(IntUnaryOperator x) {
             this.x = x;
             return this;

@@ -84,6 +84,14 @@ public record MachineSlot(SlotType slotType, int id, int x, int y) {
             return this.setY(IntUnaryOperator.identity());
         }
 
+        public Builder setNextX() {
+            return this.setX(x -> x + SIZE);
+        }
+
+        public Builder setNextY() {
+            return this.setY(y -> y + SIZE);
+        }
+
         public MachineSlot build(Optional<MachineSlot> optionalPreviousSlot) {
             var previousId = optionalPreviousSlot.map(MachineSlot::id).orElse(-1);
             var previousX = optionalPreviousSlot.map(MachineSlot::x).orElse(0);

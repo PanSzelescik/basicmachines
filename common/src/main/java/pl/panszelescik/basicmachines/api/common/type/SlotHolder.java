@@ -32,15 +32,15 @@ public enum SlotHolder {
             .addSlot(slot -> slot
                     .setUpgrade()
                     .setPreviousX()
-                    .setY(y -> y + MachineSlot.SIZE))
+                    .setNextY())
             .addSlot(slot -> slot
                     .setUpgrade()
                     .setPreviousX()
-                    .setY(y -> y + MachineSlot.SIZE))
+                    .setNextY())
             .addSlot(slot -> slot
                     .setUpgrade()
                     .setPreviousX()
-                    .setY(y -> y + MachineSlot.SIZE)),
+                    .setNextY()),
             BasicMachinesMod.id("textures/gui/container/one_input_one_output.png")),
     ;
 

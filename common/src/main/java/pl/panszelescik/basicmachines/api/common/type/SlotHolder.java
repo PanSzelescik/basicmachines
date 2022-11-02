@@ -7,6 +7,7 @@ import pl.panszelescik.basicmachines.BasicMachinesMod;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public enum SlotHolder {
@@ -47,7 +48,7 @@ public enum SlotHolder {
     private final Map<SlotType, List<MachineSlot>> slots;
     private final int slotsCount;
 
-    SlotHolder(Function<SlotHolder.Builder, SlotHolder.Builder> builder, ResourceLocation texture) {
+    SlotHolder(UnaryOperator<Builder> builder, ResourceLocation texture) {
         this(builder.apply(new SlotHolder.Builder()), texture);
     }
 
@@ -108,7 +109,7 @@ public enum SlotHolder {
         private static final Function<SlotType, List<MachineSlot>> NEW_LIST_FUNCTION = (k) -> new ObjectArrayList<>();
         private final Map<SlotType, List<MachineSlot>> slots = new Object2ObjectOpenHashMap<>();
 
-        public SlotHolder.Builder addSlot(Function<MachineSlot.Builder, MachineSlot.Builder> slot) {
+        public SlotHolder.Builder addSlot(UnaryOperator<MachineSlot.Builder> slot) {
             return this.addSlot(slot.apply(new MachineSlot.Builder()));
         }
 

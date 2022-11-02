@@ -77,11 +77,11 @@ public record MachineSlot(SlotType slotType, int id, int x, int y) {
         }
 
         public Builder setPreviousX() {
-            return this.setX(x -> x);
+            return this.setX(IntUnaryOperator.identity());
         }
 
         public Builder setPreviousY() {
-            return this.setY(y -> y);
+            return this.setY(IntUnaryOperator.identity());
         }
 
         public MachineSlot build(Optional<MachineSlot> optionalPreviousSlot) {

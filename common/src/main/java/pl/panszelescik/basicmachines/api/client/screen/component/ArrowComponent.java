@@ -29,6 +29,7 @@ public class ArrowComponent extends ProgressComponent implements IHasTooltip {
         return this.machineContainerMenu.isProcessing();
     }
 
+    @Override
     public Component getTooltip() {
         var progress = this.getProgress();
         return this.isProcessing() || progress > 0 ? Component.translatable("tooltip.basicmachines.progress", (int) progress, (int) this.getMaxProgress()) : null;

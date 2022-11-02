@@ -36,6 +36,7 @@ public class EnergyComponent extends ProgressComponent implements IHasTooltip {
         return this.machineContainerMenu.getEnergyUsagePerTick();
     }
 
+    @Override
     public List<Component> getTooltips() {
         var component = Component.translatable("tooltip.basicmachines.energy", (int) this.getProgress(), (int) this.getMaxProgress(), BasicMachinesPlatform.getEnergyType());
         return this.isProcessing()

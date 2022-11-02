@@ -21,9 +21,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
         RenderSystem.setShaderTexture(0, this.menu.machineType.getSlotHolder().getTexture());
         this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-        var p = this.menu.getArrowProgress();
-        System.out.println(p);
-        this.blit(poseStack, this.leftPos + 79, this.topPos + 34, this.imageWidth, 14, this.imageWidth + 1 + p, 16);
+        // Arrow
+        this.blit(poseStack, this.leftPos + 79, this.topPos + 34, this.imageWidth, 14, this.menu.getArrowProgress() + 1, 16);
     }
 
     @Override

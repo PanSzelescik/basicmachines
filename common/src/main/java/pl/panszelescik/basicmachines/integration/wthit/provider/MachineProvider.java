@@ -45,11 +45,11 @@ public class MachineProvider<R extends Recipe<Container>> implements IBlockCompo
         data.putInt(MachineBlockEntity.ENERGY, machineBlockEntity.getCurrentEnergy());
         data.putInt(MachineBlockEntity.MAX_ENERGY, machineBlockEntity.getMaxEnergy());
 
-        var processingTime = machineBlockEntity.getProcessingTime();
-        if (processingTime < 0) {
+        if (!machineBlockEntity.isProcessing()) {
             return;
         }
 
+        var processingTime = machineBlockEntity.getProcessingTime();
         var items = new ListTag();
         items.add(machineBlockEntity.getItem(0).save(new CompoundTag()));
         items.add(machineBlockEntity.getItem(1).save(new CompoundTag()));

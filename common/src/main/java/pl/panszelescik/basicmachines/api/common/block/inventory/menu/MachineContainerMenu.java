@@ -22,15 +22,19 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType, IMachineContainer container, ContainerData containerData) {
         super(machineType.getMenuType(), syncId);
-        checkContainerSize(container, machineType.getSlotHolder().getCount());
-        checkContainerDataCount(containerData, 4);
-        this.machineType = machineType;
-        this.container = container;
-        this.data = containerData;
-        inventory.startOpen(inventory.player);
 
+        this.machineType = machineType;
+
+        checkContainerSize(container, machineType.getSlotHolder().getCount());
+        this.container = container;
         this.addMachineSlots(machineType);
         this.addPlayerSlots(inventory);
+
+        checkContainerDataCount(containerData, 4);
+        this.data = containerData;
+        this.addDataSlots(containerData);
+
+        inventory.startOpen(inventory.player);
     }
 
     private void addMachineSlots(MachineType<R> machineType) {
@@ -111,6 +115,6 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         if (total <= 0 || progress <= 0) {
             return 0;
         }
-        return (int) (progress / total / 24);
+        return (int) (progress * (float) 24 / total);
     }
 }

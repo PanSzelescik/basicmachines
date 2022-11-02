@@ -39,6 +39,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     private final ContainerData dataAccess;
     private R lastRecipe;
     private int progressTime;
+    private int processingTime;
     private int currentEnergy;
     private boolean slotChanged = true;
     private boolean changedInTick = false;
@@ -51,32 +52,20 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         this.component = Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.machineType.getName());
         this.dataAccess = new ContainerData() {
             public int get(int i) {
-                switch (i) {
-                    case 0:
-                        return MachineBlockEntity.this.getProgress();
-                    case 1:
-                        return MachineBlockEntity.this.getProcessingTime();
-                    case 2:
-                        return MachineBlockEntity.this.getCurrentEnergy();
-                    case 3:
-                        return MachineBlockEntity.this.getMaxEnergy();
-                    default:
-                        return 0;
-                }
+                return switch (i) {
+                    case 0 -> MachineBlockEntity.this.getProgress();
+                    case 1 -> MachineBlockEntity.this.getProcessingTime();
+                    case 2 -> MachineBlockEntity.this.getCurrentEnergy();
+                    case 3 -> MachineBlockEntity.this.getMaxEnergy();
+                    default -> 0;
+                };
             }
 
             public void set(int i, int j) {
                 switch (i) {
-                    case 0:
-                        MachineBlockEntity.this.progressTime = j;
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        MachineBlockEntity.this.currentEnergy = j;
-                        break;
-                    case 3:
-                        break;
+                    case 0 -> MachineBlockEntity.this.progressTime = j;
+                    case 1 -> MachineBlockEntity.this.processingTime = j;
+                    case 2 -> MachineBlockEntity.this.currentEnergy = j;
                 }
             }
 
@@ -151,6 +140,30 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         return new MachineContainerMenu<>(syncId, inventory, this.machineType, this, this.dataAccess);
     }
 
+    private int getEnergyUsagePerTick() {
+        return this.machineType.getEnergyUsagePerTick();
+    }
+
+    @Override
+    public void setCurrentEnergy(int currentEnergy) {
+        this.currentEnergy = currentEnergy;
+        this.setChanged();
+    }
+
+    @Override
+    public int getCurrentEnergy() {
+        return this.currentEnergy;
+    }
+
+    @Override
+    public int getMaxEnergy() {
+        return 10000;
+    }
+
+    public boolean isProcessing() {
+        return this.isProcessing;
+    }
+
     private boolean findRecipe() {
         if (this.lastRecipe != null && this.lastRecipe.matches(this, this.level)) {
             return true;
@@ -163,6 +176,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         var recipe = this.machineType.getRecipeManager().getRecipeFor(this, this.level);
         recipe.ifPresent(r -> {
             this.progressTime = 0;
+            this.processingTime = this.machineType.getProcessingTime(r);
             this.lastRecipe = r;
         });
         return recipe.isPresent();
@@ -223,7 +237,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     public int getProcessingTime() {
-        return this.isProcessing ? this.machineType.getProcessingTime(this.lastRecipe) : -1;
+        return this.processingTime;
     }
 
     private void hardReset() {
@@ -260,25 +274,5 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
             machineBlockEntity.changedInTick = false;
             machineBlockEntity.setChanged();
         }
-    }
-
-    private int getEnergyUsagePerTick() {
-        return this.machineType.getEnergyUsagePerTick();
-    }
-
-    @Override
-    public void setCurrentEnergy(int currentEnergy) {
-        this.currentEnergy = currentEnergy;
-        this.setChanged();
-    }
-
-    @Override
-    public int getCurrentEnergy() {
-        return this.currentEnergy;
-    }
-
-    @Override
-    public int getMaxEnergy() {
-        return 10000;
     }
 }

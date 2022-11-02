@@ -6,7 +6,7 @@ import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineCont
 
 public class ArrowComponent extends ProgressComponent {
 
-    public static final ResourceLocation TEXTURE = BasicMachinesMod.id("textures/gui/component/arrow.png");
+    private static final ResourceLocation TEXTURE = BasicMachinesMod.id("textures/gui/component/arrow.png");
     private final MachineContainerMenu<?> machineContainerMenu;
 
     public ArrowComponent(MachineContainerMenu<?> machineContainerMenu) {

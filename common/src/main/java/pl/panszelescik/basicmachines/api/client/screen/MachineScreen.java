@@ -34,8 +34,6 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
         this.renderBackground(poseStack);
         super.render(poseStack, i, j, f);
 
-        this.energyComponent.setHovered(this.isHovering(this.energyComponent.getXPos(), this.energyComponent.getYPos(), this.energyComponent.getWidth(), this.energyComponent.getHeight(), i, j));
-
         this.arrowComponent.render(poseStack, i, j, f);
         this.energyComponent.render(poseStack, i, j, f);
 

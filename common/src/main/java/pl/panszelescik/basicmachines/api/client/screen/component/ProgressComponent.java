@@ -38,20 +38,8 @@ public abstract class ProgressComponent extends GuiComponent implements Widget {
         this.topPos = topPos;
     }
 
-    public int getXPos() {
-        return this.leftPos;
-    }
-
-    public int getYPos() {
-        return this.topPos;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
+    public boolean isHovered(int mouseX, int mouseY) {
+        return mouseY >= this.topPos && mouseY <= this.topPos + this.height && mouseX >= this.leftPos && mouseX <= this.leftPos + this.width;
     }
 
     public abstract float getProgress();

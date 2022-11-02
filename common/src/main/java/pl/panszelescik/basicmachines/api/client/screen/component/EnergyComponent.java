@@ -6,7 +6,9 @@ import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.BasicMachinesPlatform;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 
-public class EnergyComponent extends ProgressComponent implements Hoverable {
+import java.util.List;
+
+public class EnergyComponent extends ProgressComponent implements IHasTooltip {
 
     private static final ResourceLocation TEXTURE = BasicMachinesMod.id("textures/gui/component/energy.png");
     private final MachineContainerMenu<?> machineContainerMenu;
@@ -26,8 +28,18 @@ public class EnergyComponent extends ProgressComponent implements Hoverable {
         return this.machineContainerMenu.getMaxEnergy();
     }
 
-    @Override
-    public Component getTooltip() {
-        return Component.translatable("tooltip.basicmachines.energy", (int) this.getProgress(), (int) this.getMaxProgress(), BasicMachinesPlatform.getEnergyType());
+    public boolean isProcessing() {
+        return this.machineContainerMenu.isProcessing();
+    }
+
+    public int getEnergyUsage() {
+        return this.machineContainerMenu.getEnergyUsagePerTick();
+    }
+
+    public List<Component> getTooltips() {
+        var component = Component.translatable("tooltip.basicmachines.energy", (int) this.getProgress(), (int) this.getMaxProgress(), BasicMachinesPlatform.getEnergyType());
+        return this.isProcessing()
+                ? List.of(component, Component.translatable("tooltip.basicmachines.energy_usage", this.getEnergyUsage(), BasicMachinesPlatform.getEnergyType()))
+                : List.of(component);
     }
 }

@@ -51,8 +51,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineContainerMenu<
     @Override
     protected void renderTooltip(PoseStack poseStack, int i, int j) {
         super.renderTooltip(poseStack, i, j);
-        if (this.energyComponent.isHovered(i, j)) {
-            this.renderTooltip(poseStack, this.energyComponent.getTooltip(), i, j);
-        }
+
+        this.arrowComponent.renderTooltip(this, poseStack, i, j);
+        this.energyComponent.renderTooltip(this, poseStack, i, j);
     }
 }

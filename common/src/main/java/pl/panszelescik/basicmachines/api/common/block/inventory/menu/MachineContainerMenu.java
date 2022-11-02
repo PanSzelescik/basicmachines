@@ -17,7 +17,7 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
     private final ContainerData data;
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType) {
-        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType), new SimpleContainerData(4));
+        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType), new SimpleContainerData(5));
     }
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType, IMachineContainer container, ContainerData containerData) {
@@ -30,7 +30,7 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         this.addMachineSlots(machineType);
         this.addPlayerSlots(inventory);
 
-        checkContainerDataCount(containerData, 4);
+        checkContainerDataCount(containerData, 5);
         this.data = containerData;
         this.addDataSlots(containerData);
 
@@ -93,6 +93,10 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         return this.container.stillValid(player);
     }
 
+    public boolean isProcessing() {
+        return this.getProcessingTime() >= 0;
+    }
+
     public int getProgress() {
         return this.data.get(0);
     }
@@ -107,5 +111,9 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
 
     public int getMaxEnergy() {
         return this.data.get(3);
+    }
+
+    public int getEnergyUsagePerTick() {
+        return this.isProcessing() ? this.data.get(4) : 0;
     }
 }

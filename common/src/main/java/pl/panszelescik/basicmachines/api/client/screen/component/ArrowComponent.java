@@ -1,10 +1,11 @@
 package pl.panszelescik.basicmachines.api.client.screen.component;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
 
-public class ArrowComponent extends ProgressComponent {
+public class ArrowComponent extends ProgressComponent implements IHasTooltip {
 
     private static final ResourceLocation TEXTURE = BasicMachinesMod.id("textures/gui/component/arrow.png");
     private final MachineContainerMenu<?> machineContainerMenu;
@@ -22,5 +23,14 @@ public class ArrowComponent extends ProgressComponent {
     @Override
     public float getMaxProgress() {
         return this.machineContainerMenu.getProcessingTime();
+    }
+
+    public boolean isProcessing() {
+        return this.machineContainerMenu.isProcessing();
+    }
+
+    public Component getTooltip() {
+        var progress = this.getProgress();
+        return this.isProcessing() || progress > 0 ? Component.translatable("tooltip.basicmachines.progress", (int) progress, (int) this.getMaxProgress()) : null;
     }
 }

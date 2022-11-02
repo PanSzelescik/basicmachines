@@ -39,7 +39,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     private final ContainerData dataAccess;
     private R lastRecipe;
     private int progressTime;
-    private int processingTime;
     private int currentEnergy;
     private boolean slotChanged = true;
     private boolean changedInTick = false;
@@ -57,6 +56,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
                     case 1 -> MachineBlockEntity.this.getProcessingTime();
                     case 2 -> MachineBlockEntity.this.getCurrentEnergy();
                     case 3 -> MachineBlockEntity.this.getMaxEnergy();
+                    case 4 -> MachineBlockEntity.this.getEnergyUsagePerTick();
                     default -> 0;
                 };
             }
@@ -64,13 +64,12 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
             public void set(int i, int j) {
                 switch (i) {
                     case 0 -> MachineBlockEntity.this.progressTime = j;
-                    case 1 -> MachineBlockEntity.this.processingTime = j;
                     case 2 -> MachineBlockEntity.this.currentEnergy = j;
                 }
             }
 
             public int getCount() {
-                return 4;
+                return 5;
             }
         };
     }
@@ -160,10 +159,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         return 10000;
     }
 
-    public boolean isProcessing() {
-        return this.isProcessing;
-    }
-
     private boolean findRecipe() {
         if (this.lastRecipe != null && this.lastRecipe.matches(this, this.level)) {
             return true;
@@ -176,7 +171,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         var recipe = this.machineType.getRecipeManager().getRecipeFor(this, this.level);
         recipe.ifPresent(r -> {
             this.progressTime = 0;
-            this.processingTime = this.machineType.getProcessingTime(r);
             this.lastRecipe = r;
         });
         return recipe.isPresent();
@@ -237,7 +231,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     public int getProcessingTime() {
-        return this.processingTime;
+        return !this.isProcessing || this.lastRecipe == null ? -1 : this.machineType.getProcessingTime(this.lastRecipe);
     }
 
     private void hardReset() {

@@ -108,22 +108,4 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
     public int getMaxEnergy() {
         return this.data.get(3);
     }
-
-    public int getProcessingProgress() {
-        float progress = this.getProgress();
-        float total = this.getProcessingTime();
-        if (total <= 0 || progress <= 0) {
-            return 0;
-        }
-        return (int) (progress * (float) 24 / total);
-    }
-
-    public int getEnergyBar() {
-        float current = this.getCurrentEnergy();
-        float max = this.getMaxEnergy();
-        if (max <= 0 || current <= 0) {
-            return 0;
-        }
-        return (int) (current * (float) 42 / max);
-    }
 }

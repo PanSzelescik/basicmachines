@@ -10,7 +10,7 @@ import pl.panszelescik.basicmachines.BasicMachinesMod;
 @JeiPlugin
 public class BasicMachinesJEIPlugin implements IModPlugin {
 
-    private static final ResourceLocation ID = new ResourceLocation(BasicMachinesMod.MOD_ID, "jei");
+    private static final ResourceLocation ID = BasicMachinesMod.id("jei");
 
     @Override
     public ResourceLocation getPluginUid() {

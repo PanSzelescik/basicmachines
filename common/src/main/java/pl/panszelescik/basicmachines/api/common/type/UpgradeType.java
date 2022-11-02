@@ -15,7 +15,7 @@ public enum UpgradeType {
     private RegistrySupplier<UpgradeItem> item;
 
     UpgradeType() {
-        this.resourceLocation = new ResourceLocation(BasicMachinesMod.MOD_ID, this.name() + "_upgrade");
+        this.resourceLocation = BasicMachinesMod.id(this.name() + "_upgrade");
 
         this.registerItem();
     }

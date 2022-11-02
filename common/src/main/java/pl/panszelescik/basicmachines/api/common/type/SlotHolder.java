@@ -19,7 +19,7 @@ public enum SlotHolder {
                     .setOutput()
                     .setX(x -> x + 60)
                     .setPreviousY()),
-            new ResourceLocation(BasicMachinesMod.MOD_ID, "textures/gui/container/one_input_one_output.png")),
+            BasicMachinesMod.id("textures/gui/container/one_input_one_output.png")),
     ;
 
     private final ResourceLocation texture;

@@ -46,12 +46,16 @@ public class BasicMachinesMod {
         return ITEMS.register(block.getId(), () -> new BlockItem(block.get(), properties.tab(BasicMachinesMod.CREATIVE_TAB)));
     }
 
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(BasicMachinesMod.MOD_ID, path);
+    }
+
     static {
         MachineType.MACHINE_TYPES.add(ELECTRIC_FURNACE);
         MachineType.MACHINE_TYPES.add(ELECTRIC_BLAST_FURNACE);
         MachineType.MACHINE_TYPES.add(ELECTRIC_SMOKER);
 
-        CREATIVE_TAB = CreativeTabRegistry.create(new ResourceLocation(MOD_ID, "creative_tab"), () ->
+        CREATIVE_TAB = CreativeTabRegistry.create(id("creative_tab"), () ->
                 new ItemStack(ELECTRIC_FURNACE.getBlockItem()));
     }
 }

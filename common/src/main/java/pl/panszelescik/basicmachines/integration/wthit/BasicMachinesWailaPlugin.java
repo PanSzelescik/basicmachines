@@ -12,7 +12,7 @@ public class BasicMachinesWailaPlugin implements IWailaPlugin {
 
     @Override
     public void register(IRegistrar registrar) {
-        registrar.addMergedSyncedConfig(new ResourceLocation(BasicMachinesMod.MOD_ID, "wthit_provider"), true, false);
+        registrar.addMergedSyncedConfig(BasicMachinesMod.id("wthit_provider"), true, false);
         registrar.addComponent(MachineProvider.INSTANCE, TooltipPosition.BODY, MachineBlockEntity.class);
         registrar.addBlockData(MachineProvider.INSTANCE, MachineBlockEntity.class);
     }

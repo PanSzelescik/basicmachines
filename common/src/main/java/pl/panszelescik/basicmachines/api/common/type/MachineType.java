@@ -58,6 +58,10 @@ public class MachineType<R extends Recipe<Container>> {
         return this.resourceLocation;
     }
 
+    public ResourceLocation getResourceLocationOn() {
+        return new ResourceLocation(BasicMachinesMod.MOD_ID, this.resourceLocation.getPath() + "_on");
+    }
+
     public String getName() {
         return this.resourceLocation.getPath();
     }
@@ -68,6 +72,10 @@ public class MachineType<R extends Recipe<Container>> {
 
     public SlotHolder getSlotHolder() {
         return this.slotHolder;
+    }
+
+    public RegistrySupplier<MachineBlock<R>> getBlockSupplier() {
+        return this.block;
     }
 
     public MachineBlock<R> getBlock() {

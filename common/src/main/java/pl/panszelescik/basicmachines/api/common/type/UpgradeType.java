@@ -27,7 +27,11 @@ public enum UpgradeType {
     }
 
     public UpgradeItem getItem() {
-        return this.item.get();
+        return this.getItemSupplier().get();
+    }
+
+    public RegistrySupplier<UpgradeItem> getItemSupplier() {
+        return this.item;
     }
 
     private RegistrySupplier<UpgradeItem> registerItem() {

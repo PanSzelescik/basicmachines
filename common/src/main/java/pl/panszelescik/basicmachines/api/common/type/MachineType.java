@@ -1,7 +1,6 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
 import dev.architectury.registry.registries.RegistrySupplier;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -22,22 +21,22 @@ import pl.panszelescik.basicmachines.api.client.screen.MachineScreen;
 import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
 import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
+import pl.panszelescik.basicmachines.init.BasicMachinesBlocks;
+import pl.panszelescik.basicmachines.init.BasicMachinesItems;
 
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 public class MachineType<R extends Recipe<Container>> {
 
-    public static final ObjectArrayList<MachineType<?>> MACHINE_TYPES = new ObjectArrayList<>();
-
     private final ResourceLocation resourceLocation;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;
     private final SlotHolder slotHolder;
     private final ToIntFunction<R> processingTimeFunction;
-    private RegistrySupplier<MachineBlock<R>> block;
-    private RegistrySupplier<BlockItem> blockItem;
-    private RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
-    private RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
+    private final RegistrySupplier<MachineBlock<R>> block;
+    private final RegistrySupplier<BlockItem> blockItem;
+    private final RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
+    private final RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
 
     public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder) {
         this(name, recipeType, slotHolder, null);
@@ -49,14 +48,10 @@ public class MachineType<R extends Recipe<Container>> {
         this.slotHolder = slotHolder;
         this.processingTimeFunction = Objects.requireNonNullElseGet(processingTimeFunction, () -> r -> 200);
 
-        this.registerBlock();
-        this.registerBlockItem();
-        this.registerBlockEntityType();
-        this.registerMenuType();
-    }
-
-    public static void registerAllClient() {
-        MACHINE_TYPES.forEach(MachineType::registerClient);
+        this.block = this.registerBlock();
+        this.blockItem = this.registerBlockItem();
+        this.blockEntityType = this.registerBlockEntityType();
+        this.menuType = this.registerMenuType();
     }
 
     public ResourceLocation getResourceLocation() {
@@ -110,23 +105,23 @@ public class MachineType<R extends Recipe<Container>> {
     }
 
     // Registering
-    private void registerBlock() {
-        this.block = BasicMachinesMod.BLOCKS.register(this.getResourceLocation(), () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
+    private RegistrySupplier<MachineBlock<R>> registerBlock() {
+        return BasicMachinesBlocks.BLOCKS.register(this.getResourceLocation(), () -> new MachineBlock<>(BlockBehaviour.Properties.of(Material.METAL), this));
     }
 
-    private void registerBlockItem() {
-        this.blockItem = BasicMachinesMod.registerBlockItem(this.block);
+    private RegistrySupplier<BlockItem> registerBlockItem() {
+        return BasicMachinesItems.registerBlockItem(this.block);
     }
 
-    private void registerBlockEntityType() {
-        this.blockEntityType = BasicMachinesMod.BLOCK_ENTITY_TYPES.register(this.getResourceLocation(), () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
+    private RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> registerBlockEntityType() {
+        return BasicMachinesBlocks.BLOCK_ENTITY_TYPES.register(this.getResourceLocation(), () -> BlockEntityType.Builder.of(this::getBlockEntity, this.getBlock()).build(null));
     }
 
-    private void registerMenuType() {
-        this.menuType = BasicMachinesMod.MENU_TYPES.register(this.getResourceLocation(), () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
+    private RegistrySupplier<MenuType<MachineContainerMenu<R>>> registerMenuType() {
+        return BasicMachinesBlocks.MENU_TYPES.register(this.getResourceLocation(), () -> new MenuType<>((syncId, inventory) -> new MachineContainerMenu<>(syncId, inventory, this)));
     }
 
-    private void registerClient() {
+    public void registerClient() {
         MenuScreens.register(this.getMenuType(), MachineScreen::new);
     }
 }

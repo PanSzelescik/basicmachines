@@ -2,8 +2,8 @@ package pl.panszelescik.basicmachines.api.common.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.type.UpgradeType;
+import pl.panszelescik.basicmachines.init.BasicMachinesItems;
 
 public class UpgradeItem extends Item {
 
@@ -14,7 +14,7 @@ public class UpgradeItem extends Item {
     }
 
     public UpgradeItem(UpgradeType upgradeType, Properties properties) {
-        super(properties.tab(BasicMachinesMod.CREATIVE_TAB));
+        super(properties.tab(BasicMachinesItems.CREATIVE_TAB));
         this.upgradeType = upgradeType;
     }
 

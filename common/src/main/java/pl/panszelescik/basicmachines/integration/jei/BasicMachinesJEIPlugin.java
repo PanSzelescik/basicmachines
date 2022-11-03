@@ -6,6 +6,7 @@ import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.init.BasicMachinesTypes;
 
 @JeiPlugin
 public class BasicMachinesJEIPlugin implements IModPlugin {
@@ -19,8 +20,8 @@ public class BasicMachinesJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_FURNACE.getItemStack(), RecipeTypes.SMELTING);
-        registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_BLAST_FURNACE.getItemStack(), RecipeTypes.BLASTING);
-        registration.addRecipeCatalyst(BasicMachinesMod.ELECTRIC_SMOKER.getItemStack(), RecipeTypes.SMOKING);
+        registration.addRecipeCatalyst(BasicMachinesTypes.ELECTRIC_FURNACE.getItemStack(), RecipeTypes.SMELTING);
+        registration.addRecipeCatalyst(BasicMachinesTypes.ELECTRIC_BLAST_FURNACE.getItemStack(), RecipeTypes.BLASTING);
+        registration.addRecipeCatalyst(BasicMachinesTypes.ELECTRIC_SMOKER.getItemStack(), RecipeTypes.SMOKING);
     }
 }

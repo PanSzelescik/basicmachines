@@ -15,6 +15,10 @@ loom {
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+        dataGen {
+            mod "basicmachines"
+        }
     }
 }
 

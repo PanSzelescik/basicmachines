@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.item.UpgradeItem;
+import pl.panszelescik.basicmachines.init.BasicMachinesItems;
 
 import java.util.Locale;
 
@@ -14,12 +15,11 @@ public enum UpgradeType {
     ;
 
     private final ResourceLocation resourceLocation;
-    private RegistrySupplier<UpgradeItem> item;
+    private final RegistrySupplier<UpgradeItem> item;
 
     UpgradeType() {
         this.resourceLocation = BasicMachinesMod.id(this.name().toLowerCase(Locale.ROOT) + "_upgrade");
-
-        this.registerItem();
+        this.item = this.registerItem();
     }
 
     public ResourceLocation getResourceLocation() {
@@ -30,7 +30,7 @@ public enum UpgradeType {
         return this.item.get();
     }
 
-    private void registerItem() {
-        this.item = BasicMachinesMod.ITEMS.register(this.getResourceLocation(), () -> new UpgradeItem(this));
+    private RegistrySupplier<UpgradeItem> registerItem() {
+        return BasicMachinesItems.ITEMS.register(this.getResourceLocation(), () -> new UpgradeItem(this));
     }
 }

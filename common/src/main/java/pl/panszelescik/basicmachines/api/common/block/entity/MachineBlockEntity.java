@@ -18,9 +18,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.BasicMachinesPlatform;
+import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
 import pl.panszelescik.basicmachines.api.common.block.energy.IMachineEnergyStorage;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
@@ -89,6 +91,11 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         }
 
         machineBlockEntity.slotChanged = false;
+
+        if (blockState.getValue(MachineBlock.LIT) != machineBlockEntity.isProcessing) {
+            level.setBlock(blockPos, blockState.setValue(MachineBlock.LIT, machineBlockEntity.isProcessing), 3);
+            machineBlockEntity.changedInTick = true;
+        }
 
         if (machineBlockEntity.changedInTick) {
             machineBlockEntity.changedInTick = false;

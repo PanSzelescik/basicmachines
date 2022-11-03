@@ -1,4 +1,4 @@
-package pl.panszelescik.basicmachines.api.common.recipe.base.serializer;
+package pl.panszelescik.basicmachines.api.common.recipe.serializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import pl.panszelescik.basicmachines.api.common.recipe.base.OneInputOneOutputRecipe;
+import pl.panszelescik.basicmachines.api.common.recipe.OneInputOneOutputRecipe;
 import pl.panszelescik.basicmachines.api.common.util.RecipeUtil;
 
 public abstract class OneInputOneOutputSerializer<R extends OneInputOneOutputRecipe> implements RecipeSerializer<R> {

@@ -1,4 +1,4 @@
-package pl.panszelescik.basicmachines.api.common.recipe.base;
+package pl.panszelescik.basicmachines.api.common.recipe;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;

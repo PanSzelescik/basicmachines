@@ -1,6 +1,7 @@
 package pl.panszelescik.basicmachines.api.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -9,25 +10,37 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 
 public class MachineBlock<R extends Recipe<Container>> extends DirectionalBlock implements IMachineEntityBlock<R> {
 
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private final MachineType<R> machineType;
 
     public MachineBlock(Properties properties, MachineType<R> machineType) {
         super(properties);
         this.machineType = machineType;
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false));
     }
 
     public MachineType<R> getMachineType() {
         return this.machineType;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(LIT);
     }
 
     @Override
@@ -67,6 +80,13 @@ public class MachineBlock<R extends Recipe<Container>> extends DirectionalBlock 
     @Override
     public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(blockPos));
+    }
+
+    @Override
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
+        if (blockState.getValue(LIT)) {
+            // Play sound here
+        }
     }
 
     @Override

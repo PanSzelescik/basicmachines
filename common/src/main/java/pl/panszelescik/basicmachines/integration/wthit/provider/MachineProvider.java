@@ -17,6 +17,9 @@ public class MachineProvider<R extends Recipe<Container>> implements IBlockCompo
 
     public static final MachineProvider<?> INSTANCE = new MachineProvider<>();
 
+    private MachineProvider() {
+    }
+
     @Override
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         var tag = accessor.getServerData();

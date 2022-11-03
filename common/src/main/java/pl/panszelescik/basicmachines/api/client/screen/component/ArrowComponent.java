@@ -32,6 +32,7 @@ public class ArrowComponent extends ProgressComponent implements IHasTooltip {
     @Override
     public Component getTooltip() {
         var progress = this.getProgress();
-        return this.isProcessing() || progress > 0 ? Component.translatable("tooltip.basicmachines.progress", (int) progress, (int) this.getMaxProgress()) : null;
+        var maxProgress = this.getMaxProgress();
+        return this.isProcessing() || progress > 0 ? Component.translatable("tooltip.basicmachines.progress", (int) progress, maxProgress < 0 ? 0 : (int) maxProgress) : null;
     }
 }

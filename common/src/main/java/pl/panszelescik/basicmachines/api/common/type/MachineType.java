@@ -39,6 +39,10 @@ public class MachineType<R extends Recipe<Container>> {
     private RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
     private RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
 
+    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder) {
+        this(name, recipeType, slotHolder, null);
+    }
+
     public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, ToIntFunction<R> processingTimeFunction) {
         this.resourceLocation = new ResourceLocation(BasicMachinesMod.MOD_ID, name);
         this.recipeManager = RecipeManager.createCheck(recipeType);

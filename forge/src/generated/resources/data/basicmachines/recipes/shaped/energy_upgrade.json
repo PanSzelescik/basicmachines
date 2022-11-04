@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "basicmachines:energy_upgrade",
+  "key": {
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "P": {
+      "tag": "forge:ender_pearls"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    },
+    "U": {
+      "item": "basicmachines:blank_upgrade"
+    }
+  },
+  "pattern": [
+    "TPT",
+    "GUG",
+    "TGT"
+  ],
+  "result": {
+    "item": "basicmachines:energy_upgrade"
+  }
+}

@@ -19,6 +19,12 @@ loom {
         dataGen {
             mod "basicmachines"
         }
+        launches {
+            data {
+                arg "--existing", project(":common").file("src/main/resources").absolutePath
+                arg "--existing", file("src/main/resources").absolutePath
+            }
+        }
     }
 }
 

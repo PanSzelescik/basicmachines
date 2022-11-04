@@ -6,6 +6,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipeSerializer;
 import pl.panszelescik.basicmachines.recipe.CrusherRecipe;
 import pl.panszelescik.basicmachines.recipe.serializer.CrusherRecipeSerializer;
 
@@ -17,14 +18,13 @@ public class BasicMachinesRecipes {
     private BasicMachinesRecipes() {
     }
 
-    private static <R extends Recipe<?>> void registerRecipe(String name, RecipeSerializer<R> serializer, RecipeType<R> recipeType) {
-        var location = BasicMachinesMod.id(name);
-        RECIPE_SERIALIZERS.register(location, () -> serializer);
-        RECIPE_TYPES.register(location, () -> recipeType);
+    private static <R extends Recipe<?>> void registerRecipe(MachineRecipeSerializer<R> serializer, RecipeType<R> recipeType) {
+        RECIPE_SERIALIZERS.register(serializer.getId(), () -> serializer);
+        RECIPE_TYPES.register(serializer.getId(), () -> recipeType);
     }
 
     public static void register() {
-        registerRecipe("crusher", CrusherRecipeSerializer.INSTANCE, CrusherRecipe.TYPE);
+        registerRecipe(CrusherRecipeSerializer.INSTANCE, CrusherRecipe.TYPE);
 
         RECIPE_SERIALIZERS.register();
         RECIPE_TYPES.register();

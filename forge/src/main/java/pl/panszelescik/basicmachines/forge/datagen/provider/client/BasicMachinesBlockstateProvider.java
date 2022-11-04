@@ -6,6 +6,7 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
+import pl.panszelescik.basicmachines.init.BasicMachinesBlocks;
 import pl.panszelescik.basicmachines.init.BasicMachinesTypes;
 
 public class BasicMachinesBlockstateProvider extends BlockStateProvider {
@@ -16,6 +17,8 @@ public class BasicMachinesBlockstateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+        simpleBlock(BasicMachinesBlocks.IRON_CASING.get());
+
         for (var machineType : BasicMachinesTypes.MACHINE_TYPES) {
             getVariantBuilder(machineType.getBlockSupplier().get()).forAllStatesExcept(state ->
                     ConfiguredModel.builder()

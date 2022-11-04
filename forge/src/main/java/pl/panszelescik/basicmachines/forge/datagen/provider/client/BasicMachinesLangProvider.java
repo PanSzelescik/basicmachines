@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.type.UpgradeType;
+import pl.panszelescik.basicmachines.init.BasicMachinesBlocks;
+import pl.panszelescik.basicmachines.init.BasicMachinesItems;
 import pl.panszelescik.basicmachines.init.BasicMachinesTypes;
 
 import java.util.Arrays;
@@ -35,8 +37,11 @@ public class BasicMachinesLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add("itemGroup." + BasicMachinesMod.MOD_ID + ".creative_tab", "Basic Machines");
+        add("itemGroup." + BasicMachinesMod.MOD_ID + ".items", "Basic Machines");
 
+        addBlock(BasicMachinesBlocks.IRON_CASING);
+
+        addItem(BasicMachinesItems.BLANK_UPGRADE);
         for (var upgradeItem : UpgradeType.values()) {
             addItem(upgradeItem.getItemSupplier());
         }

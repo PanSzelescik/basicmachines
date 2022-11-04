@@ -18,6 +18,14 @@ public class RecipeUtil {
         return Ingredient.fromNetwork(friendlyByteBuf);
     }
 
+    public static void writeIngredient(JsonObject jsonObject, Ingredient ingredient) {
+        writeIngredient(jsonObject, "input", ingredient);
+    }
+
+    public static void writeIngredient(JsonObject jsonObject, String name, Ingredient ingredient) {
+        jsonObject.add(name, ingredient.toJson());
+    }
+
     public static void writeIngredient(FriendlyByteBuf friendlyByteBuf, Ingredient ingredient) {
         ingredient.toNetwork(friendlyByteBuf);
     }
@@ -30,6 +38,17 @@ public class RecipeUtil {
 
     public static ItemStack readItemStack(FriendlyByteBuf friendlyByteBuf) {
         return friendlyByteBuf.readItem();
+    }
+
+    public static void writeItemStack(JsonObject jsonObject, ItemStack itemStack) {
+        writeItemStack(jsonObject, "output", "amount", itemStack);
+    }
+
+    public static void writeItemStack(JsonObject jsonObject, String name, String nameAmount, ItemStack itemStack) {
+        jsonObject.addProperty(name, Registry.ITEM.getKey(itemStack.getItem()).toString());
+        if (itemStack.getCount() > 1) {
+            jsonObject.addProperty(nameAmount, itemStack.getCount());
+        }
     }
 
     public static void writeItemStack(FriendlyByteBuf friendlyByteBuf, ItemStack itemStack) {

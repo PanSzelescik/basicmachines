@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "basicmachines:block/iron_casing"
+    }
+  }
+}

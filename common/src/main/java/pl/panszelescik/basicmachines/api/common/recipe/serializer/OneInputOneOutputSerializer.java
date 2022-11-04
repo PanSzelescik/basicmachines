@@ -7,11 +7,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipeSerializer;
 import pl.panszelescik.basicmachines.api.common.recipe.OneInputOneOutputRecipe;
 import pl.panszelescik.basicmachines.api.common.util.RecipeUtil;
 
-public abstract class OneInputOneOutputSerializer<R extends OneInputOneOutputRecipe> implements RecipeSerializer<R> {
+public abstract class OneInputOneOutputSerializer<R extends OneInputOneOutputRecipe> implements MachineRecipeSerializer<R> {
 
     private static final Gson GSON = new GsonBuilder().create();
     private final OneInputOneOutputRecipeCreator<R> creator;

@@ -1,0 +1,14 @@
+{
+  "block.basicmachines.electric_blast_furnace": "Electric Blast Furnace",
+  "block.basicmachines.electric_crusher": "Electric Crusher",
+  "block.basicmachines.electric_furnace": "Electric Furnace",
+  "block.basicmachines.electric_smoker": "Electric Smoker",
+  "block.basicmachines.iron_casing": "Iron Casing",
+  "item.basicmachines.blank_upgrade": "Blank Upgrade",
+  "item.basicmachines.energy_upgrade": "Energy Upgrade",
+  "item.basicmachines.speed_upgrade": "Speed Upgrade",
+  "itemGroup.basicmachines.items": "Basic Machines",
+  "tooltip.basicmachines.energy": "%s/%s %s",
+  "tooltip.basicmachines.energy_usage": "%s %s/t",
+  "tooltip.basicmachines.progress": "%s/%s ticks"
+}

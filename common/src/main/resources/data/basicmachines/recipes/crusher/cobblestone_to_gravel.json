@@ -1,7 +1,0 @@
-{
-  "type": "basicmachines:crusher",
-  "input" : {
-    "item": "minecraft:cobblestone"
-  },
-  "output": "minecraft:gravel"
-}

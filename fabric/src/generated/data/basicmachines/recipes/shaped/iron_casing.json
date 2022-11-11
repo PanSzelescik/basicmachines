@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "basicmachines:iron_casing",
+  "key": {
+    "B": {
+      "tag": "c:iron_blocks"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    }
+  },
+  "pattern": [
+    "III",
+    "IBI",
+    "III"
+  ],
+  "result": {
+    "item": "basicmachines:iron_casing"
+  }
+}

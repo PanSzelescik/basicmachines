@@ -1,4 +1,4 @@
-package pl.panszelescik.basicmachines.forge.datagen.provider.server.builder;
+package pl.panszelescik.basicmachines.datagen.server.builder;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -39,17 +39,21 @@ public class ExtendedShapedRecipeBuilder {
         return this;
     }
 
-    public ExtendedShapedRecipeBuilder define(char character, TagKey<Item> arg) {
+    public ExtendedShapedRecipeBuilder define(char c, RecipeTags tag) {
+        return this.define(c, tag.getTag());
+    }
+
+    private ExtendedShapedRecipeBuilder define(char c, TagKey<Item> arg) {
         this.builder
-                .define(character, arg)
-                .unlockedBy("has_item_" + character, RecipeProvider.has(arg));
+                .define(c, arg)
+                .unlockedBy("has_item_" + c, RecipeProvider.has(arg));
         return this;
     }
 
-    public ExtendedShapedRecipeBuilder define(char character, ItemLike arg) {
+    public ExtendedShapedRecipeBuilder define(char c, ItemLike arg) {
         this.builder
-                .define(character, arg)
-                .unlockedBy("has_item_" + character, RecipeProvider.has(arg));
+                .define(c, arg)
+                .unlockedBy("has_item_" + c, RecipeProvider.has(arg));
         return this;
     }
 

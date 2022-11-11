@@ -1,0 +1,80 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item_C": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:copper_ingots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_G": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:gold_nuggets"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_M": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:stonecutter"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_O": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "basicmachines:iron_casing"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_R": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:redstone_dusts"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "basicmachines:shaped/electric_crusher"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_item_O",
+      "has_item_C",
+      "has_item_R",
+      "has_item_M",
+      "has_item_G",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "basicmachines:shaped/electric_crusher"
+    ]
+  }
+}

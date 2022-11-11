@@ -4,14 +4,14 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.datagen.server.BasicMachinesCommonRecipeProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesBlockModelsProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesBlockstateProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesItemModelsProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesLangProvider;
-import pl.panszelescik.basicmachines.forge.datagen.provider.server.BasicMachinesRecipeProvider;
 
 @Mod.EventBusSubscriber(modid = BasicMachinesMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BasicMachinesDatagenHandler {
+public class BasicMachinesForgeDatagen {
 
     @SubscribeEvent
     public static void dataGenEvent(GatherDataEvent event) {
@@ -26,7 +26,7 @@ public class BasicMachinesDatagenHandler {
         }
 
         if (event.includeServer()) {
-            gen.addProvider(true, new BasicMachinesRecipeProvider(gen));
+            gen.addProvider(true, new BasicMachinesCommonRecipeProvider(gen));
         }
     }
 }

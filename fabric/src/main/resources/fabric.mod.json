@@ -23,6 +23,9 @@
     "main": [
       "pl.panszelescik.basicmachines.fabric.BasicMachinesModFabric"
     ],
+    "fabric-datagen": [
+      "pl.panszelescik.basicmachines.fabric.datagen.BasicMachinesFabricDatagen"
+    ],
     "jei_mod_plugin": [
       "pl.panszelescik.basicmachines.integration.jei.BasicMachinesJEIPlugin"
     ]

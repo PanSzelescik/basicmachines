@@ -15,7 +15,9 @@ import pl.panszelescik.basicmachines.api.common.type.UpgradeType;
 public class BasicMachinesItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.ITEM_REGISTRY);
-    public static final CreativeModeTab CREATIVE_TAB = CreativeTabRegistry.create(BasicMachinesMod.id("items"), () -> new ItemStack(BasicMachinesTypes.ELECTRIC_FURNACE.getBlockItem())).setRecipeFolderName("");
+    public static final CreativeModeTab CREATIVE_TAB = CreativeTabRegistry
+            .create(BasicMachinesMod.id("items"), () -> new ItemStack(BasicMachinesTypes.ELECTRIC_FURNACE.getBlockItem()))
+            .setRecipeFolderName("");
 
     public static final RegistrySupplier<Item> BLANK_UPGRADE = registerItem("blank_upgrade");
 

@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item_L": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:lapis_lazulis"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_P": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:ender_pearls"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_T": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:redstone_torch"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_U": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "basicmachines:blank_upgrade"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "basicmachines:shaped/speed_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_item_U",
+      "has_item_P",
+      "has_item_L",
+      "has_item_T",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "basicmachines:shaped/speed_upgrade"
+    ]
+  }
+}

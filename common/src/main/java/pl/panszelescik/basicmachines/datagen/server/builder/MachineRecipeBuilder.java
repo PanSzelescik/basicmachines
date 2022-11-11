@@ -1,4 +1,4 @@
-package pl.panszelescik.basicmachines.forge.datagen.provider.server.builder;
+package pl.panszelescik.basicmachines.datagen.server.builder;
 
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.Advancement;

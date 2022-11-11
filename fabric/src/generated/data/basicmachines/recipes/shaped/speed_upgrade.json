@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "basicmachines:speed_upgrade",
+  "key": {
+    "L": {
+      "tag": "c:lapis_lazulis"
+    },
+    "P": {
+      "tag": "c:ender_pearls"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    },
+    "U": {
+      "item": "basicmachines:blank_upgrade"
+    }
+  },
+  "pattern": [
+    "TPT",
+    "LUL",
+    "TLT"
+  ],
+  "result": {
+    "item": "basicmachines:speed_upgrade"
+  }
+}

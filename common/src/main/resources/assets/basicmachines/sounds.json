@@ -1,0 +1,7 @@
+{
+  "block.crusher.work": {
+    "sounds": [
+      "basicmachines:block/crusher/work"
+    ]
+  }
+}

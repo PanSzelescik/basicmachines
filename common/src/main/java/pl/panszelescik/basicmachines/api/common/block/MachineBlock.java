@@ -1,7 +1,6 @@
 package pl.panszelescik.basicmachines.api.common.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -83,14 +82,9 @@ public class MachineBlock<R extends Recipe<Container>> extends DirectionalBlock 
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
-        if (blockState.getValue(LIT)) {
-            // Play sound here
-        }
-    }
-
-    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, this.machineType.getBlockEntityType(), MachineBlockEntity::serverTick);
+        return level.isClientSide
+                ? createTickerHelper(blockEntityType, this.machineType.getBlockEntityType(), MachineBlockEntity::clientTick)
+                : createTickerHelper(blockEntityType, this.machineType.getBlockEntityType(), MachineBlockEntity::serverTick);
     }
 }

@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -37,15 +38,17 @@ public class MachineType<R extends Recipe<Container>> {
     private final RegistrySupplier<BlockItem> blockItem;
     private final RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
     private final RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
+    private final SoundEvent soundEvent;
 
-    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder) {
-        this(name, recipeType, slotHolder, null);
+    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, SoundEvent soundEvent) {
+        this(name, recipeType, slotHolder, soundEvent, null);
     }
 
-    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, ToIntFunction<R> processingTimeFunction) {
+    public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, SoundEvent soundEvent, ToIntFunction<R> processingTimeFunction) {
         this.resourceLocation = new ResourceLocation(BasicMachinesMod.MOD_ID, name);
         this.recipeManager = RecipeManager.createCheck(recipeType);
         this.slotHolder = slotHolder;
+        this.soundEvent = soundEvent;
         this.processingTimeFunction = Objects.requireNonNullElseGet(processingTimeFunction, () -> r -> 200);
 
         this.block = this.registerBlock();
@@ -72,6 +75,10 @@ public class MachineType<R extends Recipe<Container>> {
 
     public SlotHolder getSlotHolder() {
         return this.slotHolder;
+    }
+
+    public SoundEvent getSoundEvent() {
+        return this.soundEvent;
     }
 
     public RegistrySupplier<MachineBlock<R>> getBlockSupplier() {

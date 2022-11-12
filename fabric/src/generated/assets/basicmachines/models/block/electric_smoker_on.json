@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "basicmachines:block/electric_smoker_front_on",
+    "side": "basicmachines:block/electric_smoker_side",
+    "top": "basicmachines:block/electric_smoker_top"
+  }
+}

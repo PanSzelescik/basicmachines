@@ -18,10 +18,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.BasicMachinesPlatform;
+import pl.panszelescik.basicmachines.api.client.sound.MachineSoundInstance;
 import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
 import pl.panszelescik.basicmachines.api.common.block.energy.IMachineEnergyStorage;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
@@ -32,13 +32,15 @@ import pl.panszelescik.basicmachines.api.common.type.SlotType;
 
 public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity implements IMachineContainer, MenuProvider, IMachineEnergyStorage {
 
+    public static final int DATA_COUNT = 6;
     public static final String ITEMS = "Items";
     public static final String PROGRESS = "Progress";
     public static final String PROCESSING_TIME = "Total";
     public static final String ENERGY = "Energy";
     public static final String MAX_ENERGY = "MaxEnergy";
+    public static final String IS_PROCESSING = "IsProcessing";
 
-    private final MachineType<R> machineType;
+    public final MachineType<R> machineType;
     private final NonNullList<ItemStack> items;
     private final Component component;
     private final ContainerData dataAccess;
@@ -47,7 +49,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     private int currentEnergy;
     private boolean slotChanged = true;
     private boolean changedInTick = false;
-    private boolean isProcessing = false;
+    public boolean isProcessing = false;
 
     public MachineBlockEntity(MachineType<R> machineType, BlockPos blockPos, BlockState blockState) {
         super(machineType.getBlockEntityType(), blockPos, blockState);
@@ -62,6 +64,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
                     case 2 -> MachineBlockEntity.this.getCurrentEnergy();
                     case 3 -> MachineBlockEntity.this.getMaxEnergy();
                     case 4 -> MachineBlockEntity.this.getEnergyUsagePerTick();
+                    case 5 -> MachineBlockEntity.this.isProcessing ? 1 : 0;
                     default -> 0;
                 };
             }
@@ -70,11 +73,12 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
                 switch (i) {
                     case 0 -> MachineBlockEntity.this.progressTime = j;
                     case 2 -> MachineBlockEntity.this.currentEnergy = j;
+                    case 5 -> MachineBlockEntity.this.isProcessing = j == 1;
                 }
             }
 
             public int getCount() {
-                return 5;
+                return DATA_COUNT;
             }
         };
     }
@@ -103,6 +107,12 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         }
     }
 
+    public static <R extends Recipe<Container>> void clientTick(Level level, BlockPos blockPos, BlockState blockState, MachineBlockEntity<R> machineBlockEntity) {
+        if (machineBlockEntity.machineType.getSoundEvent() != null && machineBlockEntity.isProcessing) {
+            MachineSoundInstance.playSound(machineBlockEntity);
+        }
+    }
+
     @Override
     public NonNullList<ItemStack> getItems() {
         return this.items;
@@ -119,6 +129,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         ContainerHelper.loadAllItems(compoundTag, this.items);
         this.progressTime = compoundTag.getShort(PROGRESS);
         this.currentEnergy = compoundTag.getInt(ENERGY);
+        this.isProcessing = compoundTag.getBoolean(IS_PROCESSING);
     }
 
     @Override
@@ -127,6 +138,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         ContainerHelper.saveAllItems(compoundTag, this.items);
         compoundTag.putShort(PROGRESS, (short) this.progressTime);
         compoundTag.putInt(ENERGY, this.currentEnergy);
+        compoundTag.putBoolean(IS_PROCESSING, this.isProcessing);
     }
 
     @Override

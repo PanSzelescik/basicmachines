@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import pl.panszelescik.basicmachines.api.common.block.entity.MachineBlockEntity;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
 import pl.panszelescik.basicmachines.api.common.type.MachineSlot;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
@@ -20,7 +21,7 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
     private final ContainerData data;
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType) {
-        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType), new SimpleContainerData(5));
+        this(syncId, inventory, machineType, IMachineContainer.fromMachineType(machineType), new SimpleContainerData(MachineBlockEntity.DATA_COUNT));
     }
 
     public MachineContainerMenu(int syncId, Inventory inventory, MachineType<R> machineType, IMachineContainer container, ContainerData containerData) {
@@ -33,7 +34,7 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         this.addMachineSlots(machineType);
         this.addPlayerSlots(inventory);
 
-        checkContainerDataCount(containerData, 5);
+        checkContainerDataCount(containerData, MachineBlockEntity.DATA_COUNT);
         this.data = containerData;
         this.addDataSlots(containerData);
 

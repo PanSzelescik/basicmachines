@@ -9,6 +9,8 @@ public class BasicMachinesSounds {
 
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(BasicMachinesMod.MOD_ID, Registry.SOUND_EVENT_REGISTRY);
 
+    public static final SoundEvent CRUSHER_WORK = registerSound("block.crusher.work");
+
     private BasicMachinesSounds() {
     }
 

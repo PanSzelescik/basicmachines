@@ -1,0 +1,9 @@
+// 1.19.2	2022-11-11T23:13:25.035934	Item Models: basicmachines
+e42fa516232921d620e4518f6af8192467104d52 assets/basicmachines/models/item/blank_upgrade.json
+a5f344ccca988095a12dd088c12c9800f052a6df assets/basicmachines/models/item/electric_blast_furnace.json
+17c35380ca84224c0cc9c8e795e9180687d91594 assets/basicmachines/models/item/electric_crusher.json
+3e84eefa54d4184ebde2a89ddf452ef0a8077ce6 assets/basicmachines/models/item/electric_furnace.json
+5367cdaea77dd5bfd884fd86597eebede4443244 assets/basicmachines/models/item/electric_smoker.json
+6e944aff8ce9c8d09d7d9a2206de1c0e00b9e937 assets/basicmachines/models/item/energy_upgrade.json
+26aee357fb839917103dab20cd6618b14fb463be assets/basicmachines/models/item/iron_casing.json
+5deacc3bb36fceae9b5f10c415253d724bcebb06 assets/basicmachines/models/item/speed_upgrade.json

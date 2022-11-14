@@ -9,7 +9,7 @@ displayName = "Basic Machines"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/basicmachines"
 authors = "PanSzelescik"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Basic Machines
 '''
 [[dependencies.basicmachines]]
 modId = "forge"

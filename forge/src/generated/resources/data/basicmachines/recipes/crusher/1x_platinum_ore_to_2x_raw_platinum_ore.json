@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/platinum"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:raw_materials/platinum"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "basicmachines:crusher",
+        "input": {
+          "ingredient": {
+            "tag": "forge:ores/platinum"
+          }
+        },
+        "output": {
+          "amount": 2,
+          "ingredient": {
+            "tag": "forge:raw_materials/platinum"
+          }
+        }
+      }
+    }
+  ]
+}

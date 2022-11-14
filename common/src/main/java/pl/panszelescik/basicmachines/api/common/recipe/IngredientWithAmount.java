@@ -18,8 +18,7 @@ public record IngredientWithAmount(Ingredient ingredient, int amount) {
 
     public List<ItemStack> toItemStackList() {
         return Arrays.stream(this.ingredient.getItems())
-                .map(ItemStack::copy)
-                .peek(itemStack -> itemStack.setCount(this.amount))
+                .map(this::copyItemStack)
                 .toList();
     }
 
@@ -28,8 +27,12 @@ public record IngredientWithAmount(Ingredient ingredient, int amount) {
             return ItemStack.EMPTY;
         }
 
-        var itemStack = this.ingredient.getItems()[0];
-        itemStack.setCount(this.amount);
-        return itemStack;
+        return this.copyItemStack(this.ingredient.getItems()[0]);
+    }
+
+    private ItemStack copyItemStack(ItemStack oldStack) {
+        var newStack = oldStack.copy();
+        newStack.setCount(this.amount);
+        return newStack;
     }
 }

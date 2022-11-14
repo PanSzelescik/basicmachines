@@ -8,7 +8,7 @@ import java.util.List;
 
 public record OreMaterial(String name) {
 
-    public static final List<String> MATERIALS_NAMES = Arrays.asList("iron", "gold", "copper", "tin", "silver", "lead", "osmium", "nickel", "zinc");
+    public static final List<String> MATERIALS_NAMES = Arrays.asList("iron", "gold", "copper", "tin", "silver", "lead", "osmium", "nickel", "zinc", "platinum");
     public static final List<OreMaterial> MATERIALS = MATERIALS_NAMES.stream().map(OreMaterial::new).toList();
 
     public ResourceLocation getOreTag() {

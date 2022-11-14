@@ -3,6 +3,7 @@ package pl.panszelescik.basicmachines.api.common.type;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
@@ -33,12 +34,13 @@ public class MachineType<R extends Recipe<Container>> {
     private final ResourceLocation resourceLocation;
     private final RecipeManager.CachedCheck<Container, R> recipeManager;
     private final SlotHolder slotHolder;
+    private final SoundEvent soundEvent;
+    private final Component component;
     private final ToIntFunction<R> processingTimeFunction;
     private final RegistrySupplier<MachineBlock<R>> block;
     private final RegistrySupplier<BlockItem> blockItem;
     private final RegistrySupplier<BlockEntityType<MachineBlockEntity<R>>> blockEntityType;
     private final RegistrySupplier<MenuType<MachineContainerMenu<R>>> menuType;
-    private final SoundEvent soundEvent;
 
     public MachineType(String name, RecipeType<R> recipeType, SlotHolder slotHolder, SoundEvent soundEvent) {
         this(name, recipeType, slotHolder, soundEvent, null);
@@ -49,6 +51,7 @@ public class MachineType<R extends Recipe<Container>> {
         this.recipeManager = RecipeManager.createCheck(recipeType);
         this.slotHolder = slotHolder;
         this.soundEvent = soundEvent;
+        this.component = Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.getName());
         this.processingTimeFunction = Objects.requireNonNullElseGet(processingTimeFunction, () -> r -> 200);
 
         this.block = this.registerBlock();
@@ -79,6 +82,10 @@ public class MachineType<R extends Recipe<Container>> {
 
     public SoundEvent getSoundEvent() {
         return this.soundEvent;
+    }
+
+    public Component getComponent() {
+        return this.component;
     }
 
     public RegistrySupplier<MachineBlock<R>> getBlockSupplier() {

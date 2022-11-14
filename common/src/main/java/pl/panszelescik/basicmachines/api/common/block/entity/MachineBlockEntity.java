@@ -43,7 +43,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
 
     public final MachineType<R> machineType;
     private final NonNullList<ItemStack> items;
-    private final Component component;
     private final ContainerData dataAccess;
     private R lastRecipe;
     private int progressTime;
@@ -56,7 +55,6 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         super(machineType.getBlockEntityType(), blockPos, blockState);
         this.machineType = machineType;
         this.items = NonNullList.withSize(machineType.getSlotHolder().getCount(), ItemStack.EMPTY);
-        this.component = Component.translatable("block." + BasicMachinesMod.MOD_ID + "." + this.machineType.getName());
         this.dataAccess = new ContainerData() {
             public int get(int i) {
                 return switch (i) {
@@ -173,7 +171,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
 
     @Override
     public Component getDisplayName() {
-        return this.component;
+        return this.machineType.getComponent();
     }
 
     @Override

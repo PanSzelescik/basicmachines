@@ -20,6 +20,8 @@ import java.nio.file.Path;
 
 public class BasicMachinesPlatformImpl {
 
+    private static final String FORGE = "forge";
+
     public static Path getConfigDirectory() {
         return FMLPaths.CONFIGDIR.get();
     }
@@ -57,19 +59,19 @@ public class BasicMachinesPlatformImpl {
     }
 
     public static ResourceLocation getOreTag(String name) {
-        return new ResourceLocation("forge", "ores/" + name);
+        return new ResourceLocation(FORGE, "ores/" + name);
     }
 
     public static ResourceLocation getRawOreTag(String name) {
-        return new ResourceLocation("forge", "raw_materials/" + name);
+        return new ResourceLocation(FORGE, "raw_materials/" + name);
     }
 
     public static ResourceLocation getDustTag(String name) {
-        return new ResourceLocation("forge", "dusts/" + name);
+        return new ResourceLocation(FORGE, "dusts/" + name);
     }
 
     public static ResourceLocation getIngotTag(String name) {
-        return new ResourceLocation("forge", "ingots/" + name);
+        return new ResourceLocation(FORGE, "ingots/" + name);
     }
 
     private static LazyOptional<IEnergyStorage> getEnergyStorage(ItemStack itemStack) {

@@ -11,13 +11,15 @@ import pl.panszelescik.basicmachines.init.BasicMachinesTypes;
 
 public class BasicMachinesBlockModelsProvider extends BlockModelProvider {
 
+    private static final String BLOCK_FOLDER = "block/";
+
     public BasicMachinesBlockModelsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, BasicMachinesMod.MOD_ID, existingFileHelper);
     }
 
     private void block(RegistrySupplier<Block> block) {
         var name = block.getId().getPath();
-        var blockName = "block/" + name;
+        var blockName = BLOCK_FOLDER + name;
         cubeAll(name, modLoc(blockName));
     }
 
@@ -27,8 +29,8 @@ public class BasicMachinesBlockModelsProvider extends BlockModelProvider {
 
         var ironBlock = mcLoc("block/iron_block");
         for (var machineType : BasicMachinesTypes.MACHINE_TYPES) {
-            orientable(machineType.getName(), ironBlock, modLoc("block/" + machineType.getResourceLocation().getPath()), ironBlock);
-            orientable(machineType.getName() + "_on", ironBlock, modLoc("block/" + machineType.getResourceLocationOn().getPath()), ironBlock);
+            orientable(machineType.getName(), ironBlock, modLoc(BLOCK_FOLDER + machineType.getResourceLocation().getPath()), ironBlock);
+            orientable(machineType.getName() + "_on", ironBlock, modLoc(BLOCK_FOLDER + machineType.getResourceLocationOn().getPath()), ironBlock);
         }
     }
 }

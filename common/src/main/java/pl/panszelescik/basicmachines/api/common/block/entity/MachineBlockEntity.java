@@ -49,7 +49,7 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     private int currentEnergy;
     private boolean slotChanged = true;
     private boolean changedInTick = false;
-    public boolean isProcessing = false;
+    private boolean isProcessing = false;
 
     public MachineBlockEntity(MachineType<R> machineType, BlockPos blockPos, BlockState blockState) {
         super(machineType.getBlockEntityType(), blockPos, blockState);
@@ -110,6 +110,10 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         if (machineBlockEntity.machineType.getSoundEvent() != null && machineBlockEntity.isProcessing) {
             MachineSoundInstance.playSound(machineBlockEntity);
         }
+    }
+
+    public boolean isProcessing() {
+        return this.isProcessing;
     }
 
     @Override
@@ -200,10 +204,9 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     private void takeEnergyFromItem() {
-        var items = this.getItems();
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < this.items.size(); i++) {
             if (this.getSlotHolder().getSlot(i).slotType() == SlotType.ENERGY) {
-                var stack = items.get(i);
+                var stack = this.items.get(i);
                 if (stack.isEmpty()) {
                     return;
                 }

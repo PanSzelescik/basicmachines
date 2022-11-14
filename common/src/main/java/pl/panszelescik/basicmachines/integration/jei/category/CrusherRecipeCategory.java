@@ -9,7 +9,7 @@ import pl.panszelescik.basicmachines.recipe.serializer.CrusherRecipeSerializer;
 
 public class CrusherRecipeCategory extends OneInputOneOutputRecipeCategory<CrusherRecipe> {
 
-    public static RecipeType<CrusherRecipe> TYPE = new RecipeType<>(CrusherRecipeSerializer.INSTANCE.getId(), CrusherRecipe.class);
+    public static final RecipeType<CrusherRecipe> TYPE = new RecipeType<>(CrusherRecipeSerializer.INSTANCE.getId(), CrusherRecipe.class);
 
     public CrusherRecipeCategory(IGuiHelper guiHelper) {
         super(guiHelper, BasicMachinesTypes.ELECTRIC_CRUSHER);

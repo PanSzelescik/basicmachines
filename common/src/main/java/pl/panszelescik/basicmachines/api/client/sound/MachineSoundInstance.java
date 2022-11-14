@@ -33,7 +33,7 @@ public class MachineSoundInstance<R extends Recipe<Container>> extends AbstractT
 
     @Override
     public void tick() {
-        if (this.machineBlockEntity.isRemoved() || !this.machineBlockEntity.isProcessing) {
+        if (this.machineBlockEntity.isRemoved() || !this.machineBlockEntity.isProcessing()) {
             PLAYING_FOR.remove(this.machineBlockEntity.getBlockPos());
             this.stop();
         }

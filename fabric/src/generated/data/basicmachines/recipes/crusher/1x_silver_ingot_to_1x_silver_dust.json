@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:silver_ingots",
+        "c:silver_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:silver_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:silver_dusts"
+    }
+  }
+}

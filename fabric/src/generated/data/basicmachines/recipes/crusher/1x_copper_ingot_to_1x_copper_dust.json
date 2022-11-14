@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:copper_ingots",
+        "c:copper_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:copper_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:copper_dusts"
+    }
+  }
+}

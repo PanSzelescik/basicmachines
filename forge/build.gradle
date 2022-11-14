@@ -56,11 +56,19 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 }
 
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 processResources {
     inputs.property "version", project.version
 
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
+    }
+
+    doLast {
+        fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
+            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+        }
     }
 }
 

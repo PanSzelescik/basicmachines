@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_input": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:lead_ingots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "basicmachines:crusher/1x_lead_ingot_to_1x_lead_dust"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:lead_ingots",
+        "c:lead_dusts"
+      ]
+    }
+  ],
+  "requirements": [
+    [
+      "has_input",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "basicmachines:crusher/1x_lead_ingot_to_1x_lead_dust"
+    ]
+  }
+}

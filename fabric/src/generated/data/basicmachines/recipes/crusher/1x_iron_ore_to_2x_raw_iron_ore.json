@@ -1,0 +1,23 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:iron_ores",
+        "c:raw_iron_ores"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:iron_ores"
+    }
+  },
+  "output": {
+    "amount": 2,
+    "ingredient": {
+      "tag": "c:raw_iron_ores"
+    }
+  }
+}

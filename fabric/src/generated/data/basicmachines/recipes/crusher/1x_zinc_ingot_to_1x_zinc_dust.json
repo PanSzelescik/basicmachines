@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:zinc_ingots",
+        "c:zinc_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:zinc_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:zinc_dusts"
+    }
+  }
+}

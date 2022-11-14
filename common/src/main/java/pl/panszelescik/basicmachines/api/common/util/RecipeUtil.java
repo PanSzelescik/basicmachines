@@ -1,14 +1,14 @@
 package pl.panszelescik.basicmachines.api.common.util;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import pl.panszelescik.basicmachines.api.common.recipe.IngredientWithAmount;
 
 public class RecipeUtil {
+
+    private static final String INGREDIENT = "ingredient";
+    private static final String AMOUNT = "amount";
 
     public static Ingredient readIngredient(JsonObject jsonObject) {
         return Ingredient.fromJson(jsonObject);
@@ -18,8 +18,19 @@ public class RecipeUtil {
         return Ingredient.fromNetwork(friendlyByteBuf);
     }
 
-    public static void writeIngredient(JsonObject jsonObject, Ingredient ingredient) {
-        writeIngredient(jsonObject, "input", ingredient);
+    public static IngredientWithAmount readIngredientWithAmount(JsonObject jsonObject) {
+        var ingredient = readIngredient(jsonObject.get(INGREDIENT).getAsJsonObject());
+        if (jsonObject.has(AMOUNT)) {
+            var amount = jsonObject.get(AMOUNT).getAsInt();
+            return new IngredientWithAmount(ingredient, amount);
+        }
+        return new IngredientWithAmount(ingredient);
+    }
+
+    public static IngredientWithAmount readIngredientWithAmount(FriendlyByteBuf friendlyByteBuf) {
+        var ingredient = readIngredient(friendlyByteBuf);
+        var amount = friendlyByteBuf.readVarInt();
+        return new IngredientWithAmount(ingredient, amount);
     }
 
     public static void writeIngredient(JsonObject jsonObject, String name, Ingredient ingredient) {
@@ -30,28 +41,25 @@ public class RecipeUtil {
         ingredient.toNetwork(friendlyByteBuf);
     }
 
-    public static ItemStack readItemStack(String name, int amount) {
-        return new ItemStack(Registry.ITEM
-                .getOptional(new ResourceLocation(name))
-                .orElseThrow(() -> new JsonSyntaxException("No such item " + name)), amount <= 0 ? 1 : amount);
+    public static void writeIngredientWithAmount(JsonObject jsonObject, String name, Ingredient ingredient, int amount) {
+        writeIngredientWithAmount(jsonObject, name, new IngredientWithAmount(ingredient, amount));
     }
 
-    public static ItemStack readItemStack(FriendlyByteBuf friendlyByteBuf) {
-        return friendlyByteBuf.readItem();
-    }
+    public static void writeIngredientWithAmount(JsonObject jsonObject, String name, IngredientWithAmount ingredientWithAmount) {
+        var ingredient = ingredientWithAmount.ingredient().toJson().getAsJsonObject();
+        var amount = ingredientWithAmount.amount();
 
-    public static void writeItemStack(JsonObject jsonObject, ItemStack itemStack) {
-        writeItemStack(jsonObject, "output", "amount", itemStack);
-    }
-
-    public static void writeItemStack(JsonObject jsonObject, String name, String nameAmount, ItemStack itemStack) {
-        jsonObject.addProperty(name, Registry.ITEM.getKey(itemStack.getItem()).toString());
-        if (itemStack.getCount() > 1) {
-            jsonObject.addProperty(nameAmount, itemStack.getCount());
+        var json = new JsonObject();
+        json.add(INGREDIENT, ingredient);
+        if (amount > 1) {
+            json.addProperty(AMOUNT, amount);
         }
+
+        jsonObject.add(name, json);
     }
 
-    public static void writeItemStack(FriendlyByteBuf friendlyByteBuf, ItemStack itemStack) {
-        friendlyByteBuf.writeItem(itemStack);
+    public static void writeIngredientWithAmount(FriendlyByteBuf friendlyByteBuf, IngredientWithAmount ingredient) {
+        ingredient.ingredient().toNetwork(friendlyByteBuf);
+        friendlyByteBuf.writeInt(ingredient.amount());
     }
 }

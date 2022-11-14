@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:lead_ingots",
+        "c:lead_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:lead_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:lead_dusts"
+    }
+  }
+}

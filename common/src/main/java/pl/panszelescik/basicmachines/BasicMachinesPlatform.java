@@ -1,6 +1,7 @@
 package pl.panszelescik.basicmachines;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
@@ -41,6 +42,26 @@ public class BasicMachinesPlatform {
 
     @ExpectPlatform
     public static TagKey<Item> getTagFromEnum(RecipeTags tag) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static ResourceLocation getOreTag(String name) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static ResourceLocation getRawOreTag(String name) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static ResourceLocation getDustTag(String name) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static ResourceLocation getIngotTag(String name) {
         throw new AssertionError();
     }
 }

@@ -1,5 +1,6 @@
 package pl.panszelescik.basicmachines.forge;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
@@ -53,6 +54,22 @@ public class BasicMachinesPlatformImpl {
             case NUGGETS_GOLD -> Tags.Items.NUGGETS_GOLD;
             case STORAGE_BLOCKS_IRON -> Tags.Items.STORAGE_BLOCKS_IRON;
         };
+    }
+
+    public static ResourceLocation getOreTag(String name) {
+        return new ResourceLocation("forge", "ores/" + name);
+    }
+
+    public static ResourceLocation getRawOreTag(String name) {
+        return new ResourceLocation("forge", "raw_materials/" + name);
+    }
+
+    public static ResourceLocation getDustTag(String name) {
+        return new ResourceLocation("forge", "dusts/" + name);
+    }
+
+    public static ResourceLocation getIngotTag(String name) {
+        return new ResourceLocation("forge", "ingots/" + name);
     }
 
     private static LazyOptional<IEnergyStorage> getEnergyStorage(ItemStack itemStack) {

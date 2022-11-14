@@ -1,0 +1,24 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:raw_tin_ores",
+        "c:tin_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "amount": 3,
+    "ingredient": {
+      "tag": "c:raw_tin_ores"
+    }
+  },
+  "output": {
+    "amount": 4,
+    "ingredient": {
+      "tag": "c:tin_dusts"
+    }
+  }
+}

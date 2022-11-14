@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import pl.panszelescik.basicmachines.api.common.recipe.IngredientWithAmount;
 import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipeSerializer;
 import pl.panszelescik.basicmachines.api.common.recipe.OneInputOneOutputRecipe;
 import pl.panszelescik.basicmachines.api.common.util.RecipeUtil;
@@ -24,35 +23,35 @@ public abstract class OneInputOneOutputSerializer<R extends OneInputOneOutputRec
     public R fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
         var recipeJson = GSON.fromJson(jsonObject, OneInputOneOutputJson.class);
 
-        var input = RecipeUtil.readIngredient(recipeJson.input);
-        var output = RecipeUtil.readItemStack(recipeJson.output, recipeJson.amount);
+        var input = RecipeUtil.readIngredientWithAmount(recipeJson.input);
+        var output = RecipeUtil.readIngredientWithAmount(recipeJson.output);
 
         return this.creator.create(input, output, resourceLocation);
     }
 
     @Override
     public R fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf friendlyByteBuf) {
-        var input = RecipeUtil.readIngredient(friendlyByteBuf);
-        var output = RecipeUtil.readItemStack(friendlyByteBuf);
+        var input = RecipeUtil.readIngredientWithAmount(friendlyByteBuf);
+        var output = RecipeUtil.readIngredientWithAmount(friendlyByteBuf);
 
         return this.creator.create(input, output, resourceLocation);
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf friendlyByteBuf, R recipe) {
-        RecipeUtil.writeIngredient(friendlyByteBuf, recipe.getInput());
-        RecipeUtil.writeItemStack(friendlyByteBuf, recipe.getResultItem());
+        RecipeUtil.writeIngredientWithAmount(friendlyByteBuf, recipe.getInput());
+        RecipeUtil.writeIngredientWithAmount(friendlyByteBuf, recipe.getOutput());
     }
 
     @FunctionalInterface
     public interface OneInputOneOutputRecipeCreator<R extends OneInputOneOutputRecipe> {
 
-        R create(Ingredient input, ItemStack output, ResourceLocation id);
+        R create(IngredientWithAmount input, IngredientWithAmount output, ResourceLocation id);
     }
 
     public static class OneInputOneOutputJson {
         private JsonObject input;
-        private String output;
+        private JsonObject output;
         private int amount;
     }
 }

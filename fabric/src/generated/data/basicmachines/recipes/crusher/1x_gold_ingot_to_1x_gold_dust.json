@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:gold_ingots",
+        "c:gold_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:gold_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:gold_dusts"
+    }
+  }
+}

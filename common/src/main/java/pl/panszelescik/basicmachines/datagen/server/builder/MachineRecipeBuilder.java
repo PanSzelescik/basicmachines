@@ -7,6 +7,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -21,18 +22,22 @@ import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipe;
 import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipeSerializer;
 import pl.panszelescik.basicmachines.api.common.util.RecipeUtil;
+import pl.panszelescik.basicmachines.api.datagen.builder.IRecipeBuilder;
 import pl.panszelescik.basicmachines.recipe.CrusherRecipe;
 import pl.panszelescik.basicmachines.recipe.serializer.CrusherRecipeSerializer;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-public class MachineRecipeBuilder<R extends MachineRecipe> {
+public class MachineRecipeBuilder<R extends MachineRecipe> implements IRecipeBuilder {
 
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private final MachineRecipeSerializer<R> recipeSerializer;
     private Ingredient input;
-    private ItemStack output;
+    private int inputSize = 1;
+    private Ingredient output;
+    private int outputSize = 1;
+    private ResourceLocation id;
 
     private MachineRecipeBuilder(MachineRecipeSerializer<R> recipeSerializer) {
         this.recipeSerializer = recipeSerializer;
@@ -43,12 +48,17 @@ public class MachineRecipeBuilder<R extends MachineRecipe> {
     }
 
     public MachineRecipeBuilder<R> input(ItemLike... args) {
-        return this.unlockedBy("has_input", RecipeProvider.inventoryTrigger(ItemPredicate.Builder.item().of(args).build()))
+        return this.unlockedBy("has_input", RecipeProvider.inventoryTrigger(ItemPredicate.Builder
+                        .item()
+                        .of(args)
+                        .build()))
                 .input(Ingredient.of(args));
     }
 
     public MachineRecipeBuilder<R> input(ItemStack... args) {
-        return this.input(Arrays.stream(args).map(ItemStack::getItem).toArray(ItemLike[]::new));
+        return this.input(Arrays.stream(args)
+                .map(ItemStack::getItem)
+                .toArray(ItemLike[]::new));
     }
 
     public MachineRecipeBuilder<R> input(TagKey<Item> tag) {
@@ -56,17 +66,45 @@ public class MachineRecipeBuilder<R extends MachineRecipe> {
                 .input(Ingredient.of(tag));
     }
 
+    public MachineRecipeBuilder<R> input(ResourceLocation tag) {
+        return this.input(TagKey.create(Registry.ITEM_REGISTRY, tag));
+    }
+
     private MachineRecipeBuilder<R> input(Ingredient input) {
         this.input = input;
         return this;
     }
 
-    public MachineRecipeBuilder<R> output(ItemLike item) {
-        return this.output(new ItemStack(item));
+    public MachineRecipeBuilder<R> output(ItemLike... args) {
+        return this.output(Ingredient.of(args));
     }
 
-    public MachineRecipeBuilder<R> output(ItemStack output) {
+    public MachineRecipeBuilder<R> output(ItemStack... args) {
+        return this.output(Arrays.stream(args)
+                .map(ItemStack::getItem)
+                .toArray(ItemLike[]::new));
+    }
+
+    public MachineRecipeBuilder<R> output(TagKey<Item> tag) {
+        return this.output(Ingredient.of(tag));
+    }
+
+    public MachineRecipeBuilder<R> output(ResourceLocation tag) {
+        return this.output(TagKey.create(Registry.ITEM_REGISTRY, tag));
+    }
+
+    private MachineRecipeBuilder<R> output(Ingredient output) {
         this.output = output;
+        return this;
+    }
+
+    public MachineRecipeBuilder<R> inputSize(int inputSize) {
+        this.inputSize = inputSize;
+        return this;
+    }
+
+    public MachineRecipeBuilder<R> outputSize(int outputSize) {
+        this.outputSize = outputSize;
         return this;
     }
 
@@ -75,17 +113,35 @@ public class MachineRecipeBuilder<R extends MachineRecipe> {
         return this;
     }
 
+    public MachineRecipeBuilder<R> id(ResourceLocation location) {
+        this.id = location;
+        return this;
+    }
+
+    public MachineRecipeBuilder<R> id(String name) {
+        return this.id(BasicMachinesMod.id(this.recipeSerializer.getId().getPath() + "/" + name));
+    }
+
     public void save(Consumer<FinishedRecipe> consumer, String name) {
-        this.save(consumer, BasicMachinesMod.id(this.recipeSerializer.getId().getPath() + "/" + name));
+        this.id(name).save(consumer);
     }
 
     private void save(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
+        this.id(id).save(consumer);
+    }
+
+    public void save(Consumer<FinishedRecipe> consumer) {
         this.advancement.parent(new ResourceLocation("recipes/root"))
                 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
                 .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(RequirementsStrategy.OR);
 
-        consumer.accept(new Result<>(this, id));
+        consumer.accept(new Result<>(this, this.id));
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return this.id;
     }
 
     public static class Result<R extends MachineRecipe> implements FinishedRecipe {
@@ -101,11 +157,11 @@ public class MachineRecipeBuilder<R extends MachineRecipe> {
         @Override
         public void serializeRecipeData(JsonObject jsonObject) {
             if (this.builder.input != null) {
-                RecipeUtil.writeIngredient(jsonObject, this.builder.input);
+                RecipeUtil.writeIngredientWithAmount(jsonObject, "input", this.builder.input, this.builder.inputSize);
             }
 
             if (this.builder.output != null) {
-                RecipeUtil.writeItemStack(jsonObject, this.builder.output);
+                RecipeUtil.writeIngredientWithAmount(jsonObject, "output", this.builder.output, this.builder.outputSize);
             }
         }
 

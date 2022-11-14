@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/gold"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:dusts/gold"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "basicmachines:crusher",
+        "input": {
+          "ingredient": {
+            "tag": "forge:ingots/gold"
+          }
+        },
+        "output": {
+          "ingredient": {
+            "tag": "forge:dusts/gold"
+          }
+        }
+      }
+    }
+  ]
+}

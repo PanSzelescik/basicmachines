@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/copper"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:dusts/copper"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "basicmachines:crusher",
+        "input": {
+          "ingredient": {
+            "tag": "forge:ingots/copper"
+          }
+        },
+        "output": {
+          "ingredient": {
+            "tag": "forge:dusts/copper"
+          }
+        }
+      }
+    }
+  ]
+}

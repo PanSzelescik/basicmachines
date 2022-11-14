@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/tin"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:dusts/tin"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "basicmachines:crusher",
+        "input": {
+          "ingredient": {
+            "tag": "forge:ingots/tin"
+          }
+        },
+        "output": {
+          "ingredient": {
+            "tag": "forge:dusts/tin"
+          }
+        }
+      }
+    }
+  ]
+}

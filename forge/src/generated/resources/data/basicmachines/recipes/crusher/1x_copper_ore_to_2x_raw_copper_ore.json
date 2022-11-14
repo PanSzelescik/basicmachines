@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/copper"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:raw_materials/copper"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "basicmachines:crusher",
+        "input": {
+          "ingredient": {
+            "tag": "forge:ores/copper"
+          }
+        },
+        "output": {
+          "amount": 2,
+          "ingredient": {
+            "tag": "forge:raw_materials/copper"
+          }
+        }
+      }
+    }
+  ]
+}

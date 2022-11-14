@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:osmium_ingots",
+        "c:osmium_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:osmium_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:osmium_dusts"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_input": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:raw_zinc_ores"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "basicmachines:crusher/3x_raw_zinc_ore_to_4x_zinc_dust"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:raw_zinc_ores",
+        "c:zinc_dusts"
+      ]
+    }
+  ],
+  "requirements": [
+    [
+      "has_input",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "basicmachines:crusher/3x_raw_zinc_ore_to_4x_zinc_dust"
+    ]
+  }
+}

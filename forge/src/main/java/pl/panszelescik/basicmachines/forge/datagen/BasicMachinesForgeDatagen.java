@@ -9,6 +9,7 @@ import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachines
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesBlockstateProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesItemModelsProvider;
 import pl.panszelescik.basicmachines.forge.datagen.provider.client.BasicMachinesLangProvider;
+import pl.panszelescik.basicmachines.forge.datagen.provider.server.BasicMachinesRecipeProvider;
 
 @Mod.EventBusSubscriber(modid = BasicMachinesMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BasicMachinesForgeDatagen {
@@ -26,7 +27,7 @@ public class BasicMachinesForgeDatagen {
         }
 
         if (event.includeServer()) {
-            gen.addProvider(true, new BasicMachinesCommonRecipeProvider(gen));
+            gen.addProvider(true, new BasicMachinesCommonRecipeProvider(gen, new BasicMachinesRecipeProvider()));
         }
     }
 }

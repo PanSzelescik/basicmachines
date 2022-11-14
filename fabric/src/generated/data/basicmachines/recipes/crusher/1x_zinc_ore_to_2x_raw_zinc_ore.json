@@ -1,0 +1,23 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:zinc_ores",
+        "c:raw_zinc_ores"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:zinc_ores"
+    }
+  },
+  "output": {
+    "amount": 2,
+    "ingredient": {
+      "tag": "c:raw_zinc_ores"
+    }
+  }
+}

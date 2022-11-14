@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:cobblestone"
-            ]
+            "tag": "c:zinc_ingots"
           }
         ]
       },
@@ -15,11 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "basicmachines:crusher/gravel_from_cobblestone"
+        "recipe": "basicmachines:crusher/1x_zinc_ingot_to_1x_zinc_dust"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:zinc_ingots",
+        "c:zinc_dusts"
+      ]
+    }
+  ],
   "requirements": [
     [
       "has_input",
@@ -28,7 +35,7 @@
   ],
   "rewards": {
     "recipes": [
-      "basicmachines:crusher/gravel_from_cobblestone"
+      "basicmachines:crusher/1x_zinc_ingot_to_1x_zinc_dust"
     ]
   }
 }

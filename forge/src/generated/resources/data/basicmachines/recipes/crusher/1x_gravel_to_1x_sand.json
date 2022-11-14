@@ -1,0 +1,13 @@
+{
+  "type": "basicmachines:crusher",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:gravel"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "item": "minecraft:sand"
+    }
+  }
+}

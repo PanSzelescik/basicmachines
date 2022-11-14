@@ -1,0 +1,13 @@
+{
+  "type": "basicmachines:crusher",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "item": "minecraft:gravel"
+    }
+  }
+}

@@ -7,17 +7,23 @@ import net.minecraft.world.item.crafting.Recipe;
 
 public abstract class MachineRecipe implements Recipe<Container> {
 
-    protected final ItemStack output;
+    protected final IngredientWithAmount output;
     protected final ResourceLocation id;
 
-    public MachineRecipe(ItemStack output, ResourceLocation id) {
+    public MachineRecipe(IngredientWithAmount output, ResourceLocation id) {
         this.output = output;
         this.id = id;
     }
 
+    public abstract int getInputAmount();
+
+    public IngredientWithAmount getOutput() {
+        return this.output;
+    }
+
     @Override
     public ItemStack assemble(Container container) {
-        return this.output.copy();
+        return this.getResultItem().copy();
     }
 
     @Override
@@ -27,7 +33,7 @@ public abstract class MachineRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem() {
-        return this.output;
+        return this.output.toItemStack();
     }
 
     @Override

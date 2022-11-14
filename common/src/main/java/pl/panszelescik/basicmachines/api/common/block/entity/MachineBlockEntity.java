@@ -26,6 +26,7 @@ import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
 import pl.panszelescik.basicmachines.api.common.block.energy.IMachineEnergyStorage;
 import pl.panszelescik.basicmachines.api.common.block.inventory.IMachineContainer;
 import pl.panszelescik.basicmachines.api.common.block.inventory.menu.MachineContainerMenu;
+import pl.panszelescik.basicmachines.api.common.recipe.MachineRecipe;
 import pl.panszelescik.basicmachines.api.common.type.MachineType;
 import pl.panszelescik.basicmachines.api.common.type.SlotHolder;
 import pl.panszelescik.basicmachines.api.common.type.SlotType;
@@ -273,14 +274,22 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
         this.setChangedInTick();
     }
 
+    private int getRequiredInputAmount() {
+        if (this.lastRecipe instanceof MachineRecipe machineRecipe) {
+            return machineRecipe.getInputAmount();
+        }
+
+        return 1;
+    }
+
     private void process() {
         var result = this.lastRecipe.assemble(this);
         var outputSlot = this.getItem(1);
         if (outputSlot.isEmpty()) {
             this.setItem(1, result);
-            this.getItem(0).shrink(1);
+            this.getItem(0).shrink(this.getRequiredInputAmount());
         } else if (outputSlot.sameItem(result) && outputSlot.getCount() + result.getCount() <= outputSlot.getMaxStackSize()) {
-            this.getItem(0).shrink(1);
+            this.getItem(0).shrink(this.getRequiredInputAmount());
             outputSlot.grow(result.getCount());
         }
     }

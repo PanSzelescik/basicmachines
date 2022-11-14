@@ -9,10 +9,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
+import pl.panszelescik.basicmachines.api.datagen.builder.IRecipeBuilder;
 
 import java.util.function.Consumer;
 
-public class ExtendedShapedRecipeBuilder {
+public class ExtendedShapedRecipeBuilder implements IRecipeBuilder {
 
     private final ShapedRecipeBuilder builder;
     private final ResourceLocation location;
@@ -58,6 +59,11 @@ public class ExtendedShapedRecipeBuilder {
     }
 
     public void save(Consumer<FinishedRecipe> consumer) {
-        this.builder.save(consumer, BasicMachinesMod.id("shaped/" + this.location.getPath()));
+        this.builder.save(consumer, this.getId());
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return BasicMachinesMod.id("shaped/" + this.location.getPath());
     }
 }

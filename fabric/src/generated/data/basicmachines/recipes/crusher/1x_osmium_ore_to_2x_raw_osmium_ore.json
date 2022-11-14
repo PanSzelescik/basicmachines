@@ -1,0 +1,23 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:osmium_ores",
+        "c:raw_osmium_ores"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:osmium_ores"
+    }
+  },
+  "output": {
+    "amount": 2,
+    "ingredient": {
+      "tag": "c:raw_osmium_ores"
+    }
+  }
+}

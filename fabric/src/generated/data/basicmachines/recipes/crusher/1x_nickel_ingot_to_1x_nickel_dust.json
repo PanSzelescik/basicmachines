@@ -1,0 +1,22 @@
+{
+  "type": "basicmachines:crusher",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "values": [
+        "c:nickel_ingots",
+        "c:nickel_dusts"
+      ]
+    }
+  ],
+  "input": {
+    "ingredient": {
+      "tag": "c:nickel_ingots"
+    }
+  },
+  "output": {
+    "ingredient": {
+      "tag": "c:nickel_dusts"
+    }
+  }
+}

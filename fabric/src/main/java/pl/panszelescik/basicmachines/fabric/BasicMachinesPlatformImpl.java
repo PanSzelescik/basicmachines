@@ -59,6 +59,22 @@ public class BasicMachinesPlatformImpl {
         };
     }
 
+    public static ResourceLocation getOreTag(String name) {
+        return new ResourceLocation("c", name + "_ores");
+    }
+
+    public static ResourceLocation getRawOreTag(String name) {
+        return new ResourceLocation("c", "raw_" + name + "_ores");
+    }
+
+    public static ResourceLocation getDustTag(String name) {
+        return new ResourceLocation("c", name + "_dusts");
+    }
+
+    public static ResourceLocation getIngotTag(String name) {
+        return new ResourceLocation("c", name + "_ingots");
+    }
+
     private static EnergyStorage getEnergyStorage(ItemStack itemStack) {
         return ContainerItemContext.withInitial(itemStack).find(EnergyStorage.ITEM);
     }

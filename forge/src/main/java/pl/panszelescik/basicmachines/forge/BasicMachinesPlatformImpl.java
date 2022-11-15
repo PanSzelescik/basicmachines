@@ -39,10 +39,8 @@ public class BasicMachinesPlatformImpl {
     }
 
     public static <T extends MachineBlockEntity<?>> void takeEnergyFromItem(T machineBlockEntity, ItemStack stack) {
-        var optional = getEnergyStorage(stack);
-        optional.ifPresent(energyItem -> {
-            // TODO
-        });
+        getEnergyStorage(stack)
+                .ifPresent(energyItem -> machineBlockEntity.inputEnergy(energyItem.extractEnergy(machineBlockEntity.getInputMaxEnergy(), false), false));
     }
 
     public static TagKey<Item> getTagFromEnum(RecipeTags tag) {

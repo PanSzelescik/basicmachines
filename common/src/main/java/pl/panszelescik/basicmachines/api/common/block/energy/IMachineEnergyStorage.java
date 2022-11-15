@@ -15,7 +15,7 @@ public interface IMachineEnergyStorage {
     int getMaxEnergy();
 
     default int inputEnergy(int maxAmount, boolean simulate) {
-        var inserted = Math.max(0, Math.min(this.getMaxEnergy() - this.getCurrentEnergy(), Math.min(this.getInputMaxEnergy(), maxAmount)));
+        var inserted = Math.max(0, Math.min(this.getInputMaxEnergy(), maxAmount));
         if (!simulate) {
             this.incrementEnergy(inserted);
         }
@@ -24,7 +24,7 @@ public interface IMachineEnergyStorage {
     }
 
     default int outputEnergy(int maxAmount, boolean simulate) {
-        var extracted = Math.max(0, Math.min(this.getOutputMaxEnergy(), Math.min(this.getCurrentEnergy(), maxAmount)));
+        var extracted = Math.max(0, Math.min(this.getOutputMaxEnergy(), maxAmount));
         if (!simulate) {
             this.decrementEnergy(extracted);
         }
@@ -49,10 +49,10 @@ public interface IMachineEnergyStorage {
     }
 
     default int getInputMaxEnergy() {
-        return this.canInputEnergy() ? this.getMaxEnergy() : 0;
+        return this.canInputEnergy() ? this.getMaxEnergy() - this.getCurrentEnergy() : 0;
     }
 
     default int getOutputMaxEnergy() {
-        return this.canOutputEnergy() ? this.getMaxEnergy() : 0;
+        return this.canOutputEnergy() ? this.getCurrentEnergy() : 0;
     }
 }

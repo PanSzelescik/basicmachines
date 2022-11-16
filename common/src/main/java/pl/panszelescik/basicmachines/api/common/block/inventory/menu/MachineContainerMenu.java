@@ -65,19 +65,20 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         }
     }
 
-    // TODO - Remove shift click to output slot and respect max stack size in upgrade and energy slots
     @Override
     public ItemStack quickMoveStack(Player player, int invSlot) {
         var newStack = ItemStack.EMPTY;
         var slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasItem()) {
+
+        if (slot.hasItem()) {
             var originalStack = slot.getItem();
             newStack = originalStack.copy();
-            if (invSlot < this.container.getContainerSize()) {
-                if (!this.moveItemStackTo(originalStack, this.container.getContainerSize(), this.slots.size(), true)) {
+
+            if (this.isMachineSlot(invSlot)) {
+                if (!this.moveItemStackToPlayerInventory(originalStack)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(originalStack, 0, this.container.getContainerSize(), false)) {
+            } else if (!this.moveItemStackToInputSlots(originalStack)) {
                 return ItemStack.EMPTY;
             }
 
@@ -93,9 +94,29 @@ public class MachineContainerMenu<R extends Recipe<Container>> extends AbstractC
         return newStack;
     }
 
+    private boolean moveItemStackToPlayerInventory(ItemStack originalStack) {
+        return this.moveItemStackTo(originalStack, this.container.getContainerSize(), this.slots.size(), true);
+    }
+
+    private boolean moveItemStackToInputSlots(ItemStack originalStack) {
+        var slots = this.container.getSlotHolder().getAllInputSlotsForShiftClick();
+        for (var slotId : slots) {
+            var slot = this.slots.get(slotId);
+            var stack = slot.safeInsert(originalStack);
+            if (stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean stillValid(Player player) {
         return this.container.stillValid(player);
+    }
+
+    private boolean isMachineSlot(int invSlot) {
+        return invSlot < this.container.getContainerSize();
     }
 
     public boolean isProcessing() {

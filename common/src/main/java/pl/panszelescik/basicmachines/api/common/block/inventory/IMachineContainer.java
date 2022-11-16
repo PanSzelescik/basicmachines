@@ -102,7 +102,7 @@ public interface IMachineContainer extends WorldlyContainer {
 
     @Override
     default int[] getSlotsForFace(Direction direction) {
-        return getSlotHolder().getSlots();
+        return getSlotHolder().getAllSlotsIntArray();
     }
 
     @Override

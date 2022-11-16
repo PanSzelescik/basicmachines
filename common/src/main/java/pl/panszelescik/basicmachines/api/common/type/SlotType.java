@@ -1,5 +1,6 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
+import com.google.common.collect.Ordering;
 import net.minecraft.world.item.ItemStack;
 import pl.panszelescik.basicmachines.BasicMachinesPlatform;
 import pl.panszelescik.basicmachines.api.common.item.UpgradeItem;
@@ -35,5 +36,10 @@ public enum SlotType {
 
     public boolean canAutoInsert(ItemStack itemStack) {
         return this.canAutoInsert && this.canInsert(itemStack);
+    }
+
+    // Slots must be filtered before using this!
+    public static Ordering<SlotType> orderingForShiftClickInsert() {
+        return Ordering.explicit(SlotType.ENERGY, SlotType.UPGRADE, SlotType.INPUT);
     }
 }

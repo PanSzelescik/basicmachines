@@ -19,7 +19,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import pl.panszelescik.basicmachines.BasicMachinesMod;
 import pl.panszelescik.basicmachines.BasicMachinesPlatform;
 import pl.panszelescik.basicmachines.api.client.sound.MachineSoundInstance;
 import pl.panszelescik.basicmachines.api.common.block.MachineBlock;
@@ -204,16 +203,12 @@ public class MachineBlockEntity<R extends Recipe<Container>> extends BlockEntity
     }
 
     private void takeEnergyFromItem() {
-        for (int i = 0; i < this.items.size(); i++) {
-            if (this.getSlotHolder().getSlot(i).slotType() == SlotType.ENERGY) {
-                var stack = this.items.get(i);
-                if (stack.isEmpty()) {
-                    return;
-                }
-
-                BasicMachinesPlatform.takeEnergyFromItem(this, stack);
-            }
-        }
+        this.getSlotHolder()
+                .getSlots(SlotType.ENERGY)
+                .stream()
+                .map(slot -> this.items.get(slot.id()))
+                .filter(stack -> !stack.isEmpty())
+                .forEach(stack -> BasicMachinesPlatform.takeEnergyFromItem(this, stack));
     }
 
     private boolean findRecipe() {

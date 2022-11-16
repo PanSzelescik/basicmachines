@@ -1,12 +1,19 @@
 package pl.panszelescik.basicmachines.api.common.type;
 
+import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
+import it.unimi.dsi.fastutil.objects.ObjectLists;
 import net.minecraft.resources.ResourceLocation;
 import pl.panszelescik.basicmachines.BasicMachinesMod;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -44,8 +51,13 @@ public enum SlotHolder {
             BasicMachinesMod.id("textures/gui/container/one_input_one_output.png")),
     ;
 
+    private static final Function<SlotType, ObjectList<MachineSlot>> EMPTY_LIST_FUNCTION = t -> ObjectLists.emptyList();
+
     private final ResourceLocation texture;
-    private final Map<SlotType, List<MachineSlot>> slots;
+    private final Map<SlotType, ObjectList<MachineSlot>> slots;
+    private final Supplier<ObjectArrayList<MachineSlot>> allSlots;
+    private final Supplier<int[]> allSlotsIntArray;
+    private final Supplier<int[]> allInputSlotsForShiftClick;
     private final int slotsCount;
 
     SlotHolder(UnaryOperator<Builder> builder, ResourceLocation texture) {
@@ -55,7 +67,14 @@ public enum SlotHolder {
     SlotHolder(SlotHolder.Builder builder, ResourceLocation texture) {
         this.texture = texture;
         this.slots = builder.build();
-        this.slotsCount = this.slots.values().stream().mapToInt(List::size).sum();
+        this.allSlots = Suppliers.memoize(this::getAllSlotsFunction);
+        this.allSlotsIntArray = Suppliers.memoize(this::getAllSlotsIntArrayFunction);
+        this.allInputSlotsForShiftClick = Suppliers.memoize(this::getAllInputSlotsForShiftClickFunction);
+        this.slotsCount = this.slots
+                .values()
+                .stream()
+                .mapToInt(List::size)
+                .sum();
     }
 
     public ResourceLocation getTexture() {
@@ -66,48 +85,57 @@ public enum SlotHolder {
         return this.slotsCount;
     }
 
-    public List<MachineSlot> getSlotsList(SlotType type) {
-        return this.slots.computeIfAbsent(type, t -> Collections.emptyList());
-    }
-
-    public List<MachineSlot> getSlotsList() {
-        return this.getSlotsStream().toList();
-    }
-
     public Stream<MachineSlot> getSlotsStream() {
         return this.slots.values()
                 .stream()
-                .flatMap(List::stream);
+                .flatMap(List::stream)
+                .sorted(Comparator.comparingInt(MachineSlot::id));
     }
 
-    public int getCount(SlotType slotType) {
-        return this.getSlotsList(slotType).size();
+    public ObjectList<MachineSlot> getSlots(SlotType slotType) {
+        return this.slots.computeIfAbsent(slotType, EMPTY_LIST_FUNCTION);
     }
 
-    public int[] getSlots(SlotType slotType) {
-        return this.getSlotsList(slotType)
-                .stream()
+    public MachineSlot getSlot(int id) {
+        return this.getAllSlots().get(id);
+    }
+
+    public ObjectArrayList<MachineSlot> getAllSlots() {
+        return this.allSlots.get();
+    }
+
+    public int[] getAllSlotsIntArray() {
+        return this.allSlotsIntArray.get();
+    }
+
+    public int[] getAllInputSlotsForShiftClick() {
+        return this.allInputSlotsForShiftClick.get();
+    }
+
+    // INTERNAL
+    private ObjectArrayList<MachineSlot> getAllSlotsFunction() {
+        return this.getSlotsStream()
+                .collect(ObjectArrayList.toList());
+    }
+
+    private int[] getAllSlotsIntArrayFunction() {
+        return this.getSlotsStream()
                 .mapToInt(MachineSlot::id)
                 .toArray();
     }
 
-    public int[] getSlots() {
+    private int[] getAllInputSlotsForShiftClickFunction() {
         return this.getSlotsStream()
-                .mapToInt(MachineSlot::id).
-                toArray();
-    }
-
-    public MachineSlot getSlot(int id) {
-        return this.getSlotsStream()
-                .filter(slot -> slot.id() == id)
-                .findFirst()
-                .orElseThrow();
+                .filter(slot -> slot.slotType() != SlotType.OUTPUT)
+                .sorted((slot1, slot2) -> SlotType.orderingForShiftClickInsert().compare(slot1.slotType(), slot2.slotType()))
+                .mapToInt(MachineSlot::id)
+                .toArray();
     }
 
     public static class Builder {
 
-        private static final Function<SlotType, List<MachineSlot>> NEW_LIST_FUNCTION = (k) -> new ObjectArrayList<>();
-        private final Map<SlotType, List<MachineSlot>> slots = new Object2ObjectOpenHashMap<>();
+        private static final Function<SlotType, ObjectList<MachineSlot>> NEW_LIST_FUNCTION = (k) -> new ObjectArrayList<>();
+        private final Map<SlotType, ObjectList<MachineSlot>> slots = new Object2ObjectOpenHashMap<>();
 
         public SlotHolder.Builder addSlot(UnaryOperator<MachineSlot.Builder> slot) {
             return this.addSlot(slot.apply(new MachineSlot.Builder()));
@@ -126,7 +154,7 @@ public enum SlotHolder {
                     .max(Comparator.comparingInt(MachineSlot::id));
         }
 
-        public Map<SlotType, List<MachineSlot>> build() {
+        public Map<SlotType, ObjectList<MachineSlot>> build() {
             return this.slots;
         }
     }
